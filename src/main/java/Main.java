@@ -1,3 +1,5 @@
+import sql.QueryEngine;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -22,13 +24,14 @@ public class Main {
         String userName;
         String password;
         Scanner sc = new Scanner(System.in);
+        User user;
         while(true) {
             System.out.print("USERNAME : ");
             userName = sc.next();
             System.out.print("PASSWORD : ");
             password = sc.next();
 
-            User user = User.login(userName, password);
+            user = User.login(userName, password);
 
             if (user == null) {
                 System.out.println("Invalid credentials");
@@ -60,6 +63,10 @@ public class Main {
         switch (option) {
             case 1:
                 // sql query input
+                DatabaseEngine databaseEngine = new DatabaseEngine();
+                String database = databaseEngine.selectDatabase();
+                QueryEngine queryEngine = new QueryEngine();
+                queryEngine.run(database, user.getUserName());
             case 2:
                 // sql dump code
             case 3:

@@ -10,6 +10,10 @@ public class User {
         this.password = password;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
     public static User login(String userName, String password){
         String path = "/home/heenal/DAL/DW/Project/csci-5408-dp-4/credentials.txt";
         try {
