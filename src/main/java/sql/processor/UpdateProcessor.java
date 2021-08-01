@@ -1,14 +1,34 @@
 package sql.processor;
 
 import databaseFiles.DatabaseStructures;
+import sql.LockManager;
 import sql.Query;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class UpdateProcessor {
+    LockManager lockManager = new LockManager();
+
     public void process (Query queryObj, DatabaseStructures databaseStructures) {
+        String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
+
+        // check for locks and apply lock
+        lockManager.getLocksFromFile();
+        List<String> tbLocks = new ArrayList<>();
+        if (lockManager.locks.containsKey(databaseName)) {
+            tbLocks = lockManager.locks.get(databaseName);
+            if(tbLocks.contains(tableName)) {
+                System.out.println("Table : "+tableName+" is locked! Please try again after some time");
+                return;
+            }
+        }
+        tbLocks.add(tableName);
+        lockManager.locks.put(databaseName, tbLocks);
+        lockManager.updateLocksToFile();
+
         Map<String, String> optionsMap = queryObj.getOptionMap();
         Map<String, String> conditionMap = queryObj.getConditionMap();
 
@@ -36,5 +56,16 @@ public class UpdateProcessor {
         databaseStructures.databaseData.put(tableName, tableData);
         //write the updated value in db
         databaseStructures.storeDatabase("update", "employee");
+
+        // release the lock
+        lockManager.getLocksFromFile();
+        tbLocks = lockManager.locks.get(databaseName);
+        if (tbLocks.isEmpty()) {
+            lockManager.locks.remove(databaseName);
+        }
+        else {
+            lockManager.locks.put(databaseName, tbLocks);
+        }
+        lockManager.updateLocksToFile();
     }
 }
