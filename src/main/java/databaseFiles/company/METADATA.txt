@@ -1,0 +1,2 @@
+employee = { id:int, name:varchar, deptId:int } | { PK:id - FK:(deptId:department:id) }
+department = { id:int, name:varchar } | { PK:id }
