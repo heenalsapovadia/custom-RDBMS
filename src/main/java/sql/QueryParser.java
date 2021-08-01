@@ -27,25 +27,28 @@ public class QueryParser {
         String conditions="";
         String tableName = matcher.group(2);
 
+        // if where clause exists
         Matcher whereMatcher = wherePattern.matcher(tableName);
         if (whereMatcher.find()) {
             conditions = whereMatcher.group(1);
             String[] group2 = tableName.split("where");
             tableName = group2[0].replaceAll("\\s+","");
-        }
 
-        String[] conditionArray = conditions.split("and");
-        Map<String, String> conditionMap = new HashMap<>();
-        for (String condition : conditionArray) {
-            condition = condition.replaceAll("\\s+", "");
-            String[] conditionParts = condition.split("=");
-            conditionMap.put(conditionParts[0], conditionParts[1].replaceAll("\\'", ""));
+            String[] conditionArray = conditions.split("and");
+            Map<String, String> conditionMap = new HashMap<>();
+            for (String condition : conditionArray) {
+                condition = condition.replaceAll("\\s+", "");
+                String[] conditionParts = condition.split("=");
+                conditionMap.put(conditionParts[0], conditionParts[1].replaceAll("\\'", ""));
+            }
+
+            queryObj.setCondition(conditions);
+            queryObj.setConditionMap(conditionMap);
         }
 
         queryObj.setTableName(tableName);
         queryObj.setColumns(columns);
-        queryObj.setCondition(conditions);
-        queryObj.setConditionMap(conditionMap);
+
 
         return queryObj;
     }
