@@ -5,13 +5,14 @@ import java.util.List;
 
 public class DatabaseEngine {
 
+    String database = "/home/heenal/DAL/DW/Project/csci-5408-dp-4/src/main/java/databaseFiles/databases.txt";
+
     public DatabaseEngine() {}
 
     public List<String> fetchDatabaseList() {
-        String path = "/home/heenal/DAL/DW/Project/csci-5408-dp-4/src/main/java/databaseFiles/databases.txt";
         List<String> databaseList = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(database));
             String line = bufferedReader.readLine();
             while(line != null){
                 databaseList.add(line);
