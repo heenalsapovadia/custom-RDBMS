@@ -11,7 +11,7 @@ public class SelectProcessor {
         String tableName = queryObj.getTableName();
         String columns = queryObj.getColumns();
         String[] columnsList = columns.split(",");
-        // set the columnsList to all columns if it is * ---------------- TBD
+        // set the columnsList to all columns if it is *
         if (columnsList.length == 1) {
             Set<String> columnsSet = databaseStructures.tableStructures.get(tableName).keySet();
             List<String> colsList = new ArrayList<>();
@@ -26,7 +26,6 @@ public class SelectProcessor {
         Map<String, String> conditionMap = queryObj.getConditionMap();
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
-
         List<Map<String, String>> selectedData = new ArrayList<>();
 
         for (Map<String, String> row : tableData) {
@@ -50,6 +49,7 @@ public class SelectProcessor {
 //                System.out.println("Selected row added..");
             }
         }
+
         displaySelectedData(selectedData, columnsList);
     }
 

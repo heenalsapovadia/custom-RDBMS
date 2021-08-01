@@ -7,6 +7,7 @@ public class Query {
     private String columns;
     private String condition;
     private Map<String, String> conditionMap;
+    private Map<String, String> optionMap;
 
     public String getTableName() {
         return tableName;
@@ -38,5 +39,13 @@ public class Query {
 
     public void setConditionMap(Map<String, String> conditionMap) {
         this.conditionMap = conditionMap;
+    }
+
+    public Map<String, String> getOptionMap() {
+        return optionMap;
+    }
+
+    public void setOptionMap(Map<String, String> optionMap) {
+        this.optionMap = optionMap;
     }
 }
