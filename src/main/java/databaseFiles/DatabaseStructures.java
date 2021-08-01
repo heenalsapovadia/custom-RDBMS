@@ -1,10 +1,6 @@
 package databaseFiles;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.nio.file.Path;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class DatabaseStructures {
+    public String databaseName = "";
     // table : <colname, value>
     public Map<String, List<Map<String, String>>> databaseData = new HashMap<>();
     // table : <col, datatype>
@@ -131,7 +128,45 @@ public class DatabaseStructures {
     /*
     Write the database structures back to files
      */
-    public void storeDatabase (String databaseName) {
+    public void storeDatabase (String queryType, String tableName) {
+        switch (queryType) {
+            case "update":
+                pushDatabaseData(tableName);
+            case "create":
+                // pushDatabaseData(tableName);
+                // pushKeys(tableName);
+        }
+    }
+    private void pushDatabaseData (String tableName) {
+        File file = new File(pathToDatabases+"/"+databaseName+"/"+tableName+".txt");
+        List<Map<String, String>> tableData = databaseData.get(tableName);
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            List<String> columnsList = new ArrayList<>();
+            columnsList.addAll(tableStructures.get(tableName).keySet());
+            //write columns
+            StringBuilder line = new StringBuilder();
+            for (int i=0; i<columnsList.size(); i++) {
+                line.append(columnsList.get(i));
+                if (i!=columnsList.size()-1) line.append("|");
+            }
+            bufferedWriter.write(line.toString());
+            bufferedWriter.newLine();
 
+            for (int j=0; j<tableData.size(); j++) {
+                Map<String, String> record = tableData.get(j);
+                line = new StringBuilder();
+                for (int i=0; i<columnsList.size(); i++) {
+                    line.append(record.get(columnsList.get(i)));
+                    if (i!=columnsList.size()-1) line.append("|");
+                }
+                bufferedWriter.write(line.toString());
+                if (j!=tableData.size()-1) bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        }
+        catch (IOException io) {
+            System.out.println("Exception in reading table file : "+io.getMessage());
+        }
     }
 }
