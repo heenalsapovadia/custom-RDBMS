@@ -16,7 +16,7 @@ public class DatabaseStructures {
     public Map<String, Map<String, String>> tableStructures = new HashMap<>();
     // table : column name
     public Map<String, String> primaryKeyMap = new HashMap<>();
-    // table : list of <column:value, referenceTable:value, refTableColumn:value>
+    // table : list of <column:value, refTable:value, refTableColumn:value>
     public Map<String, List<Map<String, String>>> foreignKeyMap = new HashMap<>();
 
     String pathToDatabases = "src/main/java/databaseFiles";

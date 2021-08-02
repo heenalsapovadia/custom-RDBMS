@@ -1,3 +1,5 @@
+import databaseFiles.DatabaseStructures;
+import erdGenerator.ERDGenerator;
 import sql.QueryEngine;
 
 import java.util.Arrays;
@@ -56,29 +58,36 @@ public class Main {
                 "Generate Data Dictionary",
                 "Logout",
                 "Exit");
-        int option = printSelection(userMenuOptions);
+        while (true) {
+            int option = printSelection(userMenuOptions);
 
-        switch (option) {
-            case 1:
-                // sql query input
-//                DatabaseEngine databaseEngine = new DatabaseEngine();
-//                String database = databaseEngine.selectDatabase();
-                QueryEngine queryEngine = new QueryEngine();
-                queryEngine.run("", user.getUserName());
-            case 2:
-                // sql dump code
-            case 3:
-                // erd generation
-            case 4:
-                // data dictionary
-            case 5:
-                //logout code
-            case 6:
-                //exit
-                System.out.println("Exiting System...");
-                System.exit(0);
+            switch (option) {
+                case 1:
+                    // sql query input
+                    //                DatabaseEngine databaseEngine = new DatabaseEngine();
+                    //                String database = databaseEngine.selectDatabase();
+                    QueryEngine queryEngine = new QueryEngine();
+                    queryEngine.run("", user.getUserName());
+                case 2:
+                    // sql dump code
+                case 3:
+                    // erd generation
+                    DatabaseEngine databaseEngine = new DatabaseEngine();
+                    String database = databaseEngine.selectDatabase();
+                    DatabaseStructures databaseStructures = new DatabaseStructures();
+                    databaseStructures.loadDatabase(database);
+                    ERDGenerator erdGenerator = new ERDGenerator();
+                    erdGenerator.generateERD(database, databaseStructures);
+                case 4:
+                    // data dictionary
+                case 5:
+                    //logout code
+                case 6:
+                    //exit
+                    System.out.println("Exiting System...");
+                    return;
+            }
         }
-
     }
 
     public static void displayHeader(){
