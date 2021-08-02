@@ -9,13 +9,14 @@ import java.util.*;
 public class UpdateProcessor {
     LockManager lockManager = new LockManager();
 
-    public void process (Query queryObj, DatabaseStructures databaseStructures) {
+    public String process (Query queryObj, DatabaseStructures databaseStructures) {
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
 
         // check for locks and apply lock
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
-            return;
+            // return appropriate message for log
+            return "** LOCK CONSTRAINT : "+tableName;
         }
 
         Map<String, String> optionsMap = queryObj.getOptionMap();
@@ -48,7 +49,7 @@ public class UpdateProcessor {
                         // release locks
                         lockManager.releaseLock(databaseName,tableName);
                         System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
-                        return;
+                        return "** PRIMARY KEY CONSTRAINT VIOLATED **";
                     }
                 }
                 row.put(entry.getKey(), entry.getValue());
@@ -61,5 +62,7 @@ public class UpdateProcessor {
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
+
+        return "Successfully Updated "+3+" rows";
     }
 }

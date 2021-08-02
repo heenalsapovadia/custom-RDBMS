@@ -1,0 +1,5 @@
+Query Submission TimeStamp : 2021-08-02T23:11:41.091486Z
+** DATABASE NOT SELECTED **
+Time Elapsed : PT0.022943S
+
+Query Submission TimeStamp : 2021-08-02T23:11:44.850371Z
