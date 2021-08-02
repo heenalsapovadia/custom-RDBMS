@@ -1,3 +1,4 @@
+import SQLDump.SQLDumpGenerator;
 import databaseFiles.DatabaseStructures;
 import erdGenerator.ERDGenerator;
 import sql.QueryEngine;
@@ -59,6 +60,8 @@ public class Main {
                 "Logout",
                 "Exit");
         while (true) {
+            DatabaseEngine databaseEngine = new DatabaseEngine();
+            String database;
             int option = printSelection(userMenuOptions);
 
             switch (option) {
@@ -70,10 +73,12 @@ public class Main {
                     queryEngine.run("", user.getUserName());
                 case 2:
                     // sql dump code
+                    database = databaseEngine.selectDatabase();
+                    SQLDumpGenerator sqlDumpGenerator = new SQLDumpGenerator();
+                    sqlDumpGenerator.generateDumps(database);
                 case 3:
                     // erd generation
-                    DatabaseEngine databaseEngine = new DatabaseEngine();
-                    String database = databaseEngine.selectDatabase();
+                    database = databaseEngine.selectDatabase();
                     DatabaseStructures databaseStructures = new DatabaseStructures();
                     databaseStructures.loadDatabase(database);
                     ERDGenerator erdGenerator = new ERDGenerator();
