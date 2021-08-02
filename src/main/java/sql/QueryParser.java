@@ -7,8 +7,9 @@ import java.util.regex.Pattern;
 
 public class QueryParser {
 
-    public void createParser(String query) {
-
+    public Query createParser(String query) {
+        Query queryObj = new Query();
+        return queryObj;
     }
 
     public Query selectParser (String queryString) {
@@ -18,7 +19,7 @@ public class QueryParser {
         Query queryObj = new Query();
         queryString = queryString.replace(";", "");
         Pattern pattern = Pattern.compile("select\\s+(.*)\\s+from\\s+(.*)");
-        Pattern wherePattern = Pattern.compile("where\\s+(.*)");
+        Pattern wherePart = Pattern.compile("where\\s+(.*)");
         Matcher matcher = pattern.matcher(queryString);
 
         matcher.find();
@@ -28,7 +29,7 @@ public class QueryParser {
         String tableName = matcher.group(2);
 
         // if where clause exists
-        Matcher whereMatcher = wherePattern.matcher(tableName);
+        Matcher whereMatcher = wherePart.matcher(tableName);
         if (whereMatcher.find()) {
             conditions = whereMatcher.group(1);
             String[] group2 = tableName.split("where");
@@ -60,7 +61,7 @@ public class QueryParser {
         Query queryObj = new Query();
         queryString = queryString.replace(";", "");
         Pattern pattern = Pattern.compile("update\\s+(.*)\\s+set\\s+(.*)");
-        Pattern wherePattern = Pattern.compile("where\\s+(.*)");
+        Pattern wherePart = Pattern.compile("where\\s+(.*)");
         Matcher matcher = pattern.matcher(queryString);
 
         matcher.find();
@@ -68,7 +69,7 @@ public class QueryParser {
         String optionsPart = matcher.group(2);
 
         String conditions = "";
-        Matcher whereMatcher = wherePattern.matcher(optionsPart);
+        Matcher whereMatcher = wherePart.matcher(optionsPart);
         if (whereMatcher.find()) {
             conditions = whereMatcher.group(1);
             String[] group2 = optionsPart.split("where");
@@ -99,7 +100,50 @@ public class QueryParser {
         return queryObj;
     }
 
-    public void deleteParser (String query) {
+    public Query deleteParser (String query) {
+        Query queryOBJ = new Query();
+        String query_removed = query.replace(";", "");
 
+        Pattern pattern = Pattern.compile("delete\\s+(.*)\\s+from\\s+(.*)");
+        Pattern wherePart = Pattern.compile("where\\s+(.*)");
+
+        Matcher matcher = pattern.matcher(query);
+
+        matcher.find();
+        String tableName = matcher.group(1);
+        String optionsPart = matcher.group(2);
+
+        String conditions = "";
+        Matcher whereMatcher = wherePart.matcher(optionsPart);
+        if (whereMatcher.find()) {
+            conditions = whereMatcher.group(1);
+            String[] group2 = optionsPart.split("where");
+            optionsPart = group2[0].replaceAll("\\s+","");
+
+            String[] conditionArray = conditions.split("and");
+            Map<String, String> conditionMap = new HashMap<>();
+            for (String condition : conditionArray) {
+                condition = condition.replaceAll("\\s+", "");
+                String[] conditionParts = condition.split("=");
+                conditionMap.put(conditionParts[0], conditionParts[1].replaceAll("\\'", ""));
+            }
+            queryOBJ.setCondition(conditions);
+            queryOBJ.setConditionMap(conditionMap);
+        }
+
+        optionsPart = optionsPart.replaceAll("\\s+", "");
+        String[] optionsList = optionsPart.split(",");
+        Map<String, String> optionsMap = new HashMap<>();
+        for (String option : optionsList) {
+            option = option.replaceAll("\\s+", "");
+            String[] optParts = option.split("=");
+            optionsMap.put(optParts[0], optParts[1].replaceAll("\\'", ""));
+        }
+
+        queryOBJ.setOptionMap(optionsMap);
+        queryOBJ.setTableName(tableName);
+        // BUG: How to pass the column name
+        // TODO: PASS THE COLUMN NAME
+        return  queryOBJ;
     }
 }

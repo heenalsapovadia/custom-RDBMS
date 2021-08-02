@@ -1,6 +1,8 @@
 package sql;
 
 import databaseFiles.DatabaseStructures;
+import sql.processor.CreateProcessor;
+import sql.processor.DeleteProcessor;
 import sql.processor.SelectProcessor;
 import sql.processor.UpdateProcessor;
 
@@ -45,7 +47,10 @@ public class QueryEngine {
                     case "use" :
                         // load tableData
                     case "create" :
-//                        queryObj = queryParser.createParser(query);
+                        queryObj = queryParser.createParser(query);
+                        CreateProcessor createProcessor = new CreateProcessor();
+                        createProcessor.create(queryObj, databaseStructures);
+                        break;
 
                     case "select" :
 //                        databaseStructures.loadDatabase("company"); // only for testing
@@ -63,6 +68,10 @@ public class QueryEngine {
                         break;
 
                     case "delete" :
+                        queryObj = queryParser.deleteParser(query);
+                        DeleteProcessor deleteProcessor = new DeleteProcessor();
+                        deleteProcessor.delete(queryObj, databaseStructures);
+                        break;
                 }
 
             }
