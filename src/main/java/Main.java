@@ -49,7 +49,6 @@ public class Main {
                 break;
             }
         }
-        System.out.println("Successful Login!");
 
         List<String> userMenuOptions = Arrays.asList("Execute SQL Query",
                 "Generate SQL Dump",
@@ -58,15 +57,14 @@ public class Main {
                 "Logout",
                 "Exit");
         int option = printSelection(userMenuOptions);
-        System.out.println("option selectedd : "+option);
 
         switch (option) {
             case 1:
                 // sql query input
-                DatabaseEngine databaseEngine = new DatabaseEngine();
-                String database = databaseEngine.selectDatabase();
+//                DatabaseEngine databaseEngine = new DatabaseEngine();
+//                String database = databaseEngine.selectDatabase();
                 QueryEngine queryEngine = new QueryEngine();
-                queryEngine.run(database, user.getUserName());
+                queryEngine.run("", user.getUserName());
             case 2:
                 // sql dump code
             case 3:
