@@ -60,4 +60,33 @@ public class LockManager {
             System.out.println("Exception in reading Locks file : "+io.getMessage());
         }
     }
+
+    public boolean checkAndApplyLock (String database, String table) {
+        getLocksFromFile();
+        List<String> tbLocks = new ArrayList<>();
+        if (locks.containsKey(database)) {
+            tbLocks = locks.get(database);
+            if(tbLocks.contains(table)) {
+                System.out.println("Table : "+table+" is locked! Please try again after some time");
+                return false;
+            }
+        }
+        tbLocks.add(table);
+        locks.put(database, tbLocks);
+        updateLocksToFile();
+        return true;
+    }
+
+    public void releaseLock (String database, String table) {
+        getLocksFromFile();
+        List<String> tbLocks = locks.get(database);
+        tbLocks.remove(table);
+        if (tbLocks.isEmpty()) {
+            locks.remove(database);
+        }
+        else {
+            locks.put(database, tbLocks);
+        }
+        updateLocksToFile();
+    }
 }

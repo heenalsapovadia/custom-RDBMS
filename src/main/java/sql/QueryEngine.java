@@ -1,6 +1,8 @@
 package sql;
 
+import databaseFiles.DatabaseStructures;
 import sql.processor.SelectProcessor;
+import sql.processor.UpdateProcessor;
 
 import java.util.Scanner;
 
@@ -13,8 +15,12 @@ public class QueryEngine {
     public void run(String database, String userName) {
         this.userName = userName;
         this.database = database;
+        DatabaseStructures databaseStructures = new DatabaseStructures();
+
         QueryValidator queryValidator = new QueryValidator();
         String queryType;
+        //temp code
+//        databaseStructures.databaseName = "company"; // only for testing
 
         while (true) {
             String query = inputQuery();
@@ -24,33 +30,43 @@ public class QueryEngine {
                 continue;
             }
             else if (queryType.equals("exit")){
-                break;
+                return;
             }
-            else if (!queryType.equals("use")) {
+            else if (!queryType.equals("use") && databaseStructures.databaseName.isEmpty()) {
                 System.out.println("Please select database - 'use <database_name>'"); // can add 'show databases'
                 continue;
             }
             else {
                 //call sql parsers
-//                queryValidator.parseQuery(queryType, query);
                 QueryParser queryParser = new QueryParser();
                 Query queryObj = new Query();
                 // call sql query execution
-                switch (query) {
+                switch (queryType) {
+                    case "use" :
+                        // load tableData
                     case "create" :
-//                queryParser.createParser(query);
+//                        queryObj = queryParser.createParser(query);
 
                     case "select" :
+//                        databaseStructures.loadDatabase("company"); // only for testing
                         queryObj = queryParser.selectParser(query);
                         SelectProcessor selectProcessor = new SelectProcessor();
-//                        selectProcessor.process();
+                        selectProcessor.process(queryObj, databaseStructures);
+                        break;
 
                     case "insert" :
+
                     case "update" :
+                        queryObj = queryParser.updateParser(query);
+                        UpdateProcessor updateProcessor = new UpdateProcessor();
+                        updateProcessor.process(queryObj, databaseStructures);
+                        break;
+
                     case "delete" :
                 }
 
             }
+            System.out.println("--------------END OF QUERY------------");
         }
     }
 

@@ -4,9 +4,7 @@ import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class UpdateProcessor {
     LockManager lockManager = new LockManager();
@@ -16,23 +14,19 @@ public class UpdateProcessor {
         String tableName = queryObj.getTableName();
 
         // check for locks and apply lock
-        lockManager.getLocksFromFile();
-        List<String> tbLocks = new ArrayList<>();
-        if (lockManager.locks.containsKey(databaseName)) {
-            tbLocks = lockManager.locks.get(databaseName);
-            if(tbLocks.contains(tableName)) {
-                System.out.println("Table : "+tableName+" is locked! Please try again after some time");
-                return;
-            }
+        if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
+            return;
         }
-        tbLocks.add(tableName);
-        lockManager.locks.put(databaseName, tbLocks);
-        lockManager.updateLocksToFile();
 
         Map<String, String> optionsMap = queryObj.getOptionMap();
         Map<String, String> conditionMap = queryObj.getConditionMap();
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
+        String primaryKeyColumn = databaseStructures.primaryKeyMap.get(tableName);
+        Set<String> uniqueKeyValues = new HashSet<>();
+        for (Map<String, String> record : tableData) {
+            uniqueKeyValues.add(record.get(primaryKeyColumn));
+        }
 
         // for loop over tableData - update the ds
         for (int i=0; i<tableData.size(); i++) {
@@ -49,6 +43,14 @@ public class UpdateProcessor {
                     continue;
             }
             for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
+                if (entry.getKey().equals(primaryKeyColumn)) {
+                    if (uniqueKeyValues.contains(entry.getValue())) {
+                        // release locks
+                        lockManager.releaseLock(databaseName,tableName);
+                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
+                        return;
+                    }
+                }
                 row.put(entry.getKey(), entry.getValue());
             }
             tableData.set(i, row);
@@ -58,14 +60,6 @@ public class UpdateProcessor {
         databaseStructures.storeDatabase("update", "employee");
 
         // release the lock
-        lockManager.getLocksFromFile();
-        tbLocks = lockManager.locks.get(databaseName);
-        if (tbLocks.isEmpty()) {
-            lockManager.locks.remove(databaseName);
-        }
-        else {
-            lockManager.locks.put(databaseName, tbLocks);
-        }
-        lockManager.updateLocksToFile();
+        lockManager.releaseLock(databaseName, tableName);
     }
 }

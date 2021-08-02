@@ -118,7 +118,7 @@ public class DatabaseStructures {
         keys = keys.replaceAll("\\s+", "");
         String[] keysParts = keys.split("-");
         String PK = keysParts[0];
-        primaryKeyMap.put(tableName, PK.split(":")[0]);
+        primaryKeyMap.put(tableName, PK.split(":")[1]);
 
         if (keysParts.length>1) {
             String FK = keysParts[1];
