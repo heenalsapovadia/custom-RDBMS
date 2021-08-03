@@ -133,10 +133,13 @@ public class QueryEngine {
                     case "delete" :
                         queryObj = queryParser.deleteParser(query);
                         DeleteProcessor deleteProcessor = new DeleteProcessor();
-                        message = deleteProcessor.process(queryObj, databaseStructures);
+                        DatabaseStructures deletedStructures = deleteProcessor.process(queryObj, databaseStructures);
+                        if (deletedStructures!=null) {
+                            deletedStructures.pushDatabaseData(queryObj.getTableName());
+                        }
                         logGenerator.log(queryType);
                         end = Instant.now();
-                        logGenerator.log(message);
+                        logGenerator.log(deleteProcessor.logMessage);
                         logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
 

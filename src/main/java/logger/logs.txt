@@ -182,29 +182,83 @@ use
 Database set : company
 Time Elapsed : PT0.048436S
 
-Query Submission TimeStamp : 2021-08-03T21:38:32.508027304Z
+Query Submission TimeStamp : 2021-08-03T22:00:39.774685Z
 use
 Database set : company
-Time Elapsed : PT0.06150963S
+Time Elapsed : PT0.037338S
 
-Query Submission TimeStamp : 2021-08-03T21:38:46.272001749Z
-create
+Query Submission TimeStamp : 2021-08-03T22:00:46.346158Z
+delete
+Deleted 3 rows
+Time Elapsed : PT0.08366S
 
-Time Elapsed : PT0.008343603S
-
-Query Submission TimeStamp : 2021-08-03T21:40:15.080435623Z
+Query Submission TimeStamp : 2021-08-03T22:03:14.370167Z
 use
 Database set : company
-Time Elapsed : PT0.044444554S
+Time Elapsed : PT0.030653S
 
-Query Submission TimeStamp : 2021-08-03T21:40:23.964998470Z
-Query Submission TimeStamp : 2021-08-03T21:43:13.439462928Z
+Query Submission TimeStamp : 2021-08-03T22:03:17.618279Z
+delete
+Deleted 3 rows
+Time Elapsed : PT0.033814S
+
+Query Submission TimeStamp : 2021-08-03T22:04:03.111218Z
 use
 Database set : company
-Time Elapsed : PT0.052901485S
+Time Elapsed : PT0.035983S
 
-Query Submission TimeStamp : 2021-08-03T21:43:20.323001600Z
-create
-Operation done
-Time Elapsed : PT0.008767295S
+Query Submission TimeStamp : 2021-08-03T22:04:05.247345Z
+delete
+Deleted 3 rows
+Time Elapsed : PT0.031559S
+
+Query Submission TimeStamp : 2021-08-03T22:05:11.564188Z
+use
+Database set : company
+Time Elapsed : PT0.030804S
+
+Query Submission TimeStamp : 2021-08-03T22:05:13.677739Z
+delete
+Deleted 3 rows
+Time Elapsed : PT0.032869S
+
+Query Submission TimeStamp : 2021-08-03T22:11:59.654750Z
+use
+Database set : company
+Time Elapsed : PT0.033387S
+
+Query Submission TimeStamp : 2021-08-03T22:12:09.325176Z
+delete
+Deleted 3 rows
+Time Elapsed : PT0.092611S
+
+Query Submission TimeStamp : 2021-08-03T22:12:59.326661Z
+use
+Database set : company
+Time Elapsed : PT0.017264S
+
+Query Submission TimeStamp : 2021-08-03T22:13:07.025145Z
+START TRANSACTION
+INSERT : Successfully Inserted 1 row
+DELETE : Deleted 3 rows
+TRANSACTION COMMIT
+END OF TRANSACTION
+Time Elapsed : PT32.756214S
+
+Query Submission TimeStamp : 2021-08-03T22:14:09.685192Z
+START TRANSACTION
+** ERROR in INSERT
+END OF TRANSACTION
+Time Elapsed : PT32.035241S
+
+Query Submission TimeStamp : 2021-08-03T22:15:57.112575Z
+use
+Database set : company
+Time Elapsed : PT0.034254S
+
+Query Submission TimeStamp : 2021-08-03T22:16:01.567299Z
+START TRANSACTION
+** TRANSACTION ROLLBACK **
+END OF TRANSACTION
+Time Elapsed : PT19.701445S
 
