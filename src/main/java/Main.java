@@ -67,9 +67,6 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    // sql query input
-                    //                DatabaseEngine databaseEngine = new DatabaseEngine();
-                    //                String database = databaseEngine.selectDatabase();
                     QueryEngine queryEngine = new QueryEngine();
                     queryEngine.run("", user.getUserName());
                     break;
