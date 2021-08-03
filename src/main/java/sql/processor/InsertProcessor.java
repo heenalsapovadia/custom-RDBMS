@@ -3,14 +3,17 @@ package sql.processor;
 import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
+import sql.QueryValidator;
 
 import java.util.*;
 
 public class InsertProcessor {
 
     LockManager lockManager = new LockManager();
+    QueryValidator queryValidator = new QueryValidator();
+    public String logMessage = "";
 
-    public String process(Query queryObj, DatabaseStructures databaseStructures) {
+    public DatabaseStructures process(Query queryObj, DatabaseStructures databaseStructures) {
 
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
@@ -18,7 +21,8 @@ public class InsertProcessor {
         // check for locks and apply lock
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
             // return appropriate message for log
-            return "** LOCK CONSTRAINT : " + tableName;
+            logMessage = "** LOCK CONSTRAINT : "+tableName;
+            return null;
         }
 
         Map<String, String> optionsMap = queryObj.getOptionMap();
@@ -36,8 +40,8 @@ public class InsertProcessor {
                 if (uniqueKeyValues.contains(entry.getValue())) {
                     // release locks
                     lockManager.releaseLock(databaseName, tableName);
-                    System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
-                    return "** PRIMARY KEY CONSTRAINT VIOLATED **";
+                    logMessage = "** PRIMARY KEY CONSTRAINT VIOLATED **";
+                    return null;
                 }
             }
             row.put(entry.getKey(), entry.getValue());
@@ -45,11 +49,11 @@ public class InsertProcessor {
         tableData.add(row);
         databaseStructures.databaseData.put(tableName, tableData);
         //write the updated value in db
-        databaseStructures.storeDatabase("insert", tableName);
+//        databaseStructures.storeDatabase("insert", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
-
-        return "Successfully Inserted "+1+" row";
+        logMessage = "Successfully Inserted 1 row";
+        return databaseStructures;
     }
 }

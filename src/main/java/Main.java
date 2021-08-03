@@ -57,7 +57,6 @@ public class Main {
         List<String> userMenuOptions = Arrays.asList("Execute SQL Query",
                 "Generate SQL Dump",
                 "Generate ERD",
-                "Generate Data Dictionary",
                 "Logout",
                 "Exit");
         while (true) {
@@ -67,9 +66,6 @@ public class Main {
 
             switch (option) {
                 case 1:
-                    // sql query input
-                    //                DatabaseEngine databaseEngine = new DatabaseEngine();
-                    //                String database = databaseEngine.selectDatabase();
                     QueryEngine queryEngine = new QueryEngine();
                     queryEngine.run("", user.getUserName());
                     break;
@@ -88,14 +84,16 @@ public class Main {
                     erdGenerator.generateERD(database, databaseStructures);
                     break;
                 case 4:
-                    // data dictionary
+                    //logout
+                    System.out.println("Logging out System...");
+                    return;
                 case 5:
-                    //logout code
-                case 6:
                     //exit
                     System.out.println("Exiting System...");
                     return;
             }
+
+            System.out.println("\n");
         }
     }
 
@@ -118,7 +116,7 @@ public class Main {
 
             if (scanner.hasNextInt()) {
                 selected = scanner.nextInt();
-                if (selected >= selectionOptions.size() || selected < 0) {
+                if (selected > selectionOptions.size() || selected <= 0) {
                     System.out.println("INVALID SELECTION");
                     continue;
                 }

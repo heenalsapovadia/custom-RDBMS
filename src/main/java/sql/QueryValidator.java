@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class QueryValidator {
 
-    Set<String> queryTypes = Set.of("use", "create", "insert", "update", "delete", "select", "exit");
+    Set<String> queryTypes = Set.of("use", "create", "insert", "update", "delete", "select", "exit", "start", "commit", "rollback");
 
     public QueryValidator () {}
 
@@ -29,7 +29,6 @@ public class QueryValidator {
 
     public boolean isVarchar (String value) {
         try {
-            System.out.println(value);
             Pattern pattern = Pattern.compile("'(.*)'");
             Matcher matcher = pattern.matcher(value);
             matcher.find();

@@ -1,16 +1,12 @@
 package sql;
 
 import databaseFiles.DatabaseStructures;
-import sql.processor.CreateProcessor;
-import sql.processor.DeleteProcessor;
+import sql.processor.*;
 import logger.LogGenerator;
-import sql.processor.InsertProcessor;
-import sql.processor.SelectProcessor;
-import sql.processor.UpdateProcessor;
-import sql.processor.UseProcessor;
 
 import java.time.Duration;
 import java.time.Instant;
+import java.util.List;
 import java.util.Scanner;
 
 public class QueryEngine {
@@ -30,15 +26,13 @@ public class QueryEngine {
 
         QueryValidator queryValidator = new QueryValidator();
         String queryType;
-        //temp code
-//        databaseStructures.databaseName = "company"; // only for testing
 
         while (true) {
             String query = inputQuery();
-            // log - query submission time
             start = Instant.now();
             logGenerator.log("Query Submission TimeStamp : "+start);
             queryType = queryValidator.getQueryType(query);
+
             if (queryType.equals("INVALID")) {
                 System.out.println("INVALID SQL QUERY ENTERED...try again");
                 end = Instant.now();
@@ -65,12 +59,9 @@ public class QueryEngine {
                 QueryParser queryParser = new QueryParser();
                 Query queryObj = new Query();
                 String message="";
-                // call sql query execution
-                //queryType="use";
                 switch (queryType) {
                     case "use" :
                         // load tableData
-                        System.out.println("Insie use");
                         queryObj = queryParser.useParser(query);
                         UseProcessor useProcessor = new UseProcessor();
                         String databaseName = useProcessor.process(queryObj, databaseStructures);
@@ -89,9 +80,10 @@ public class QueryEngine {
                             message = createProcessor.createdb(queryObj, databaseStructures);
                             logGenerator.log(queryType);
                             end = Instant.now();
-                            logGenerator.log(message);                        }
+                            logGenerator.log(message);
+                        }
                         if(queryObj.getType().equals("table")){
-                            message = createProcessor.createtable(queryObj,databaseStructures);
+//                            message = createProcessor.createtable(queryObj,databaseStructures);
                             System.out.println("Table Created");
                             logGenerator.log(queryType);
                             end = Instant.now();
@@ -102,7 +94,6 @@ public class QueryEngine {
                         break;
 
                     case "select" :
-                        System.out.println("Insie select");
                         queryObj = queryParser.selectParser(query);
                         SelectProcessor selectProcessor = new SelectProcessor();
                         message = selectProcessor.process(queryObj, databaseStructures);
@@ -115,20 +106,27 @@ public class QueryEngine {
                     case "insert" :
                         queryObj = queryParser.insertParser(query);
                         InsertProcessor insertProcessor = new InsertProcessor();
-                        message=insertProcessor.process(queryObj,databaseStructures);
+                        DatabaseStructures insertedStructures = insertProcessor.process(queryObj,databaseStructures);
+                        if (insertedStructures!=null) {
+                            insertedStructures.pushDatabaseData(queryObj.getTableName());
+                        }
                         logGenerator.log(queryType);
                         end = Instant.now();
-                        logGenerator.log(message);
+                        logGenerator.log(insertProcessor.logMessage);
                         logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
 
                     case "update" :
                         queryObj = queryParser.updateParser(query);
                         UpdateProcessor updateProcessor = new UpdateProcessor();
-                        message = updateProcessor.process(queryObj, databaseStructures);
+                        DatabaseStructures updatedStructures = updateProcessor.process(queryObj, databaseStructures);
+                        if (updatedStructures!=null) {
+                            updatedStructures.pushDatabaseData(queryObj.getTableName());
+                        }
+                        System.out.println("Insider logs : "+updateProcessor.logMessage);
                         logGenerator.log(queryType);
                         end = Instant.now();
-                        logGenerator.log(message);
+                        logGenerator.log(updateProcessor.logMessage);
                         logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
 
@@ -141,8 +139,22 @@ public class QueryEngine {
                         logGenerator.log(message);
                         logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
+
+                    case "start" :
+                        logGenerator.log("START TRANSACTION");
+                        List<String> queries = queryParser.transactionParser(query);
+                        if (queries == null) {
+                            // handle error cases
+                            break;
+                        }
+                        TransactionProcessor transactionProcessor = new TransactionProcessor();
+                        transactionProcessor.process(queries, databaseStructures);
+                        logGenerator.log("END OF TRANSACTION");
+                        end = Instant.now();
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
+                        break;
                 }
-                System.out.println(message);
+                System.out.println(message+"\n");
             }
 
         }
