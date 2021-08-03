@@ -74,6 +74,7 @@ public class QueryEngine {
                         queryObj = queryParser.useParser(query);
                         UseProcessor useProcessor = new UseProcessor();
                         String databaseName = useProcessor.process(queryObj, databaseStructures);
+//                        System.out.println(databaseName);
                         databaseStructures.loadDatabase(databaseName);
                         message = "Database set : "+databaseName;
                         logGenerator.log(queryType);
@@ -91,7 +92,7 @@ public class QueryEngine {
                             end = Instant.now();
                             logGenerator.log(message);                        }
                         if(queryObj.getType().equals("table")){
-                            message = createProcessor.createtable(queryObj,databaseStructures);
+//                            message = createProcessor.createtable(queryObj,databaseStructures);
                             System.out.println("Table Created");
                             logGenerator.log(queryType);
                             end = Instant.now();
@@ -142,7 +143,7 @@ public class QueryEngine {
                         logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
                 }
-                System.out.println(message);
+                System.out.println(message+"\n");
             }
 
         }

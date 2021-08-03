@@ -53,7 +53,7 @@ public class UpdateProcessor {
                     if (uniqueKeyValues.contains(entry.getValue())) {
                         // release locks
                         lockManager.releaseLock(databaseName,tableName);
-                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
+//                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
                         return "** PRIMARY KEY CONSTRAINT VIOLATED **";
                     }
                 }
@@ -63,7 +63,6 @@ public class UpdateProcessor {
                     }
                     else {
                         lockManager.releaseLock(databaseName,tableName);
-                        System.out.println("** DATATYPE CONSTRAINT VIOLATED - Expected INT **");
                         return "** DATATYPE CONSTRAINT VIOLATED - Expected INT **";
                     }
                 }
@@ -75,7 +74,6 @@ public class UpdateProcessor {
                         System.out.println("inside else");
                         // release locks
                         lockManager.releaseLock(databaseName,tableName);
-                        System.out.println("** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **");
                         return "** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **";
                     }
                 }
