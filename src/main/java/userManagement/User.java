@@ -1,3 +1,5 @@
+package userManagement;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -15,7 +17,7 @@ public class User {
     }
 
     public static User login(String userName, String password){
-        String path = "C:\\Users\\HELI\\csci-5408-dp-4_\\credentials.txt";
+        String path = "src/main/java/userManagement/credentials.txt";
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(path));
             String line = bufferedReader.readLine();

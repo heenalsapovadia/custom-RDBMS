@@ -3,3 +3,75 @@ Query Submission TimeStamp : 2021-08-02T23:11:41.091486Z
 Time Elapsed : PT0.022943S
 
 Query Submission TimeStamp : 2021-08-02T23:11:44.850371Z
+Query Submission TimeStamp : 2021-08-03T09:58:04.615184Z
+** DATABASE NOT SELECTED **
+Time Elapsed : PT0.032291S
+
+Query Submission TimeStamp : 2021-08-03T09:58:08.596778Z
+Query Submission TimeStamp : 2021-08-03T09:58:18.261893Z
+select
+Rows returned : 6
+Time Elapsed : PT0.02279S
+
+Query Submission TimeStamp : 2021-08-03T09:58:34.993487Z
+Query Submission TimeStamp : 2021-08-03T09:59:51.236263Z
+Query Submission TimeStamp : 2021-08-03T10:00:25.470503Z
+Query Submission TimeStamp : 2021-08-03T10:01:33.617600Z
+Query Submission TimeStamp : 2021-08-03T10:03:03.663877Z
+Query Submission TimeStamp : 2021-08-03T10:03:08.303261Z
+Query Submission TimeStamp : 2021-08-03T10:03:29.178511Z
+Query Submission TimeStamp : 2021-08-03T10:03:35.771075Z
+select
+Rows returned : 6
+Time Elapsed : PT0.021102S
+
+Query Submission TimeStamp : 2021-08-03T10:04:00.237777Z
+select
+Rows returned : 2
+Time Elapsed : PT0.010751S
+
+Query Submission TimeStamp : 2021-08-03T10:04:18.643483Z
+select
+Rows returned : 1
+Time Elapsed : PT0.006486S
+
+Query Submission TimeStamp : 2021-08-03T10:04:36.496277Z
+update
+Successfully Updated 3 rows
+Time Elapsed : PT0.033245S
+
+Query Submission TimeStamp : 2021-08-03T10:04:45.551885Z
+select
+Rows returned : 1
+Time Elapsed : PT0.00778S
+
+Query Submission TimeStamp : 2021-08-03T10:04:58.990941Z
+select
+Rows returned : 1
+Time Elapsed : PT0.006261S
+
+Query Submission TimeStamp : 2021-08-03T10:05:12.360639Z
+EXIT
+Time Elapsed : PT0.001515S
+
+Query Submission TimeStamp : 2021-08-03T10:10:50.468009Z
+Query Submission TimeStamp : 2021-08-03T10:11:05.031255Z
+Query Submission TimeStamp : 2021-08-03T10:11:18.677035Z
+** DATABASE NOT SELECTED **
+Time Elapsed : PT0.022086S
+
+Query Submission TimeStamp : 2021-08-03T10:11:23.113565Z
+Query Submission TimeStamp : 2021-08-03T10:11:42.839266Z
+insert
+Successfully Inserted 1 row
+Time Elapsed : PT0.034667S
+
+Query Submission TimeStamp : 2021-08-03T10:11:53.234797Z
+select
+Rows returned : 7
+Time Elapsed : PT0.018087S
+
+Query Submission TimeStamp : 2021-08-03T10:12:01.501166Z
+EXIT
+Time Elapsed : PT0.001041S
+

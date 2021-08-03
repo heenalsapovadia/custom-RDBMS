@@ -2,6 +2,7 @@ import SQLDump.SQLDumpGenerator;
 import databaseFiles.DatabaseStructures;
 import erdGenerator.ERDGenerator;
 import sql.QueryEngine;
+import userManagement.User;
 
 import java.util.Arrays;
 import java.util.List;
@@ -71,11 +72,13 @@ public class Main {
                     //                String database = databaseEngine.selectDatabase();
                     QueryEngine queryEngine = new QueryEngine();
                     queryEngine.run("", user.getUserName());
+                    break;
                 case 2:
                     // sql dump code
                     database = databaseEngine.selectDatabase();
                     SQLDumpGenerator sqlDumpGenerator = new SQLDumpGenerator();
                     sqlDumpGenerator.generateDumps(database);
+                    break;
                 case 3:
                     // erd generation
                     database = databaseEngine.selectDatabase();
@@ -83,6 +86,7 @@ public class Main {
                     databaseStructures.loadDatabase(database);
                     ERDGenerator erdGenerator = new ERDGenerator();
                     erdGenerator.generateERD(database, databaseStructures);
+                    break;
                 case 4:
                     // data dictionary
                 case 5:

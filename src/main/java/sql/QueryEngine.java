@@ -62,7 +62,7 @@ public class QueryEngine {
                 //call sql parsers
                 QueryParser queryParser = new QueryParser();
                 Query queryObj = new Query();
-                String message;
+                String message="";
                 // call sql query execution
                 //queryType="use";
                 switch (queryType) {
@@ -73,7 +73,11 @@ public class QueryEngine {
                         UseProcessor useProcessor = new UseProcessor();
                         String databaseName = useProcessor.process(queryObj, databaseStructures);
                         databaseStructures.loadDatabase(databaseName);
-                        //System.out.println(message);
+                        message = "Database set : "+databaseName;
+                        logGenerator.log(queryType);
+                        end = Instant.now();
+                        logGenerator.log(message);
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
 
                     case "create" :
@@ -91,7 +95,7 @@ public class QueryEngine {
                         break;
 
                     case "insert" :
-                        queryParser.insertParser(query);
+                        queryObj = queryParser.insertParser(query);
                         InsertProcessor insertProcessor = new InsertProcessor();
                         message=insertProcessor.process(queryObj,databaseStructures);
                         logGenerator.log(queryType);
@@ -112,9 +116,9 @@ public class QueryEngine {
 
                     case "delete" :
                 }
-
+                System.out.println(message);
             }
-            System.out.println("--------------END OF QUERY------------");
+
         }
     }
 
