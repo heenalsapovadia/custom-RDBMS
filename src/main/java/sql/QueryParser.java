@@ -1,11 +1,14 @@
 package sql;
 
-import java.util.HashMap;
-import java.util.Map;
+import logger.LogGenerator;
+
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class QueryParser {
+
+    LogGenerator logGenerator = new LogGenerator();
 
     public Query createParser(String query) {
         Query queryObj = new Query();
@@ -27,8 +30,7 @@ public class QueryParser {
         return queryObj;
     }
 
-    public Query useParser(String queryString)
-    {
+    public Query useParser(String queryString) {
         queryString = queryString.replaceAll(";", "");
         String[] sql = queryString.split(" ");
 
@@ -130,6 +132,7 @@ public class QueryParser {
 
 
     }
+
     public Query updateParser (String queryString) {
         // update table_name set col1=abc, col2=12;
         // update table_name set col1=abc where col2 = c;
@@ -219,5 +222,34 @@ public class QueryParser {
         queryOBJ.setOptionMap(optionsMap);
         queryOBJ.setTableName(tableName);
         return  queryOBJ;
+    }
+
+    public List<String> transactionParser (String query) {
+        Scanner scanner = new Scanner(System.in);
+        Pattern pattern = Pattern.compile("start\\s+transaction");
+        Matcher matcher = pattern.matcher(query);
+        List<String> queries = new ArrayList<>();
+        if (matcher.find()) {
+//            System.out.println("continue...");
+            Pattern endpattern = Pattern.compile("end\\s+transaction");
+            Matcher endmatcher = endpattern.matcher("");
+
+            while (!endmatcher.find()) {
+                String q = scanner.nextLine();
+                queries.add(q);
+//                System.out.println("added...");
+                endmatcher = endpattern.matcher(q);
+            }
+        }
+        else {
+            System.out.println("Invalid start transaction query entered");
+            return null;
+        }
+        queries.remove(queries.size()-1);
+        if (!queries.get(queries.size()-1).contains("commit") && !queries.get(queries.size()-1).contains("rollback")) {
+            System.out.println("Please specify rollback or commit in transaction");
+            return null;
+        }
+        return queries;
     }
 }
