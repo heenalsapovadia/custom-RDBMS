@@ -71,7 +71,7 @@ public class QueryParser {
 
         Query queryObj = new Query();
         queryString = queryString.replace(";", "");
-        Pattern pattern = Pattern.compile("insert into\\s+(.*)\\s+(.*)\\s+values\\s+(.*)", Pattern.DOTALL);
+        Pattern pattern = Pattern.compile("insert into\\s+(.*?)\\s+\\((.*?)\\)\\s+values\\s+\\((.*?)\\)");
         Matcher matcher = pattern.matcher(queryString);
 
         matcher.find();

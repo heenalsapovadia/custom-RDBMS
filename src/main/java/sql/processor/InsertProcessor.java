@@ -12,16 +12,6 @@ public class InsertProcessor {
 
     public String process(Query queryObj, DatabaseStructures databaseStructures) {
 
-        //String databaseName = databaseStructures.databaseName;
-        //String tableName = queryObj.getTableName();
-
-        // check for locks and apply lock
-        //if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
-        // return appropriate message for log
-        //   return "** LOCK CONSTRAINT : "+tableName;
-        // }
-
-
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
 
@@ -32,7 +22,6 @@ public class InsertProcessor {
         }
 
         Map<String, String> optionsMap = queryObj.getOptionMap();
-        Map<String, String> conditionMap = queryObj.getConditionMap();
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
         String primaryKeyColumn = databaseStructures.primaryKeyMap.get(tableName);
@@ -41,23 +30,26 @@ public class InsertProcessor {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
         }
 
-
-        for (int i = 0; i < tableData.size(); i++) {
-            Map<String, String> row = tableData.get(i);
-
-            for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
-                if (entry.getKey().equals(primaryKeyColumn)) {
-                    if (uniqueKeyValues.contains(entry.getValue())) {
-                        // release locks
-                        lockManager.releaseLock(databaseName, tableName);
-                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
-                        return "** PRIMARY KEY CONSTRAINT VIOLATED **";
-                    }
+        Map<String, String> row = new HashMap<>();
+        for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
+            if (entry.getKey().equals(primaryKeyColumn)) {
+                if (uniqueKeyValues.contains(entry.getValue())) {
+                    // release locks
+                    lockManager.releaseLock(databaseName, tableName);
+                    System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
+                    return "** PRIMARY KEY CONSTRAINT VIOLATED **";
                 }
-                row.put(entry.getKey(), entry.getValue());
             }
-            //tableDat.set(i, row);n "Successfully added "+3+" rows";
+            row.put(entry.getKey(), entry.getValue());
         }
-        return "Successfully added";
+        tableData.add(row);
+        databaseStructures.databaseData.put(tableName, tableData);
+        //write the updated value in db
+        databaseStructures.storeDatabase("insert", tableName);
+
+        // release the lock
+        lockManager.releaseLock(databaseName, tableName);
+
+        return "Successfully Inserted "+1+" row";
     }
 }

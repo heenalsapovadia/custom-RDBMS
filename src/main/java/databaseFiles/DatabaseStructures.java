@@ -147,9 +147,12 @@ public class DatabaseStructures {
         switch (queryType) {
             case "update":
                 pushDatabaseData(tableName);
+            case "insert":
+                pushDatabaseData(tableName);
             case "create":
                 // pushDatabaseData(tableName);
                 // pushKeys(tableName);
+
         }
     }
     private void pushDatabaseData (String tableName) {
