@@ -29,7 +29,6 @@ public class QueryValidator {
 
     public boolean isVarchar (String value) {
         try {
-            System.out.println(value);
             Pattern pattern = Pattern.compile("'(.*)'");
             Matcher matcher = pattern.matcher(value);
             matcher.find();

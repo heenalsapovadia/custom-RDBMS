@@ -12,6 +12,7 @@ public class ERDGenerator {
 
     public void generateERD (String database, DatabaseStructures databaseStructures) {
         generateCardinality(database, databaseStructures);
+
         String pathToErdOfDatabase = pathToERD+"/"+database+".txt";
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(pathToErdOfDatabase));
@@ -19,10 +20,17 @@ public class ERDGenerator {
                 Set<String> tableSet = cardinalityMap.keySet();
                 List<String> tableList = new ArrayList<>();
                 tableList.addAll(tableSet);
+                String table1 = printTable(tableList.get(0), databaseStructures);
+                bufferedWriter.write(table1);
+                System.out.println(table1);
                 String str = "Cardinality between "+tableList.get(0)+" and "+tableList.get(1)+" - ";
                 String cardinality = cardinalityMap.get(tableList.get(0))+" : "+cardinalityMap.get(tableList.get(1));
                 bufferedWriter.write(str+cardinality);
+                bufferedWriter.newLine();
                 System.out.println(str+cardinality);
+                String table2 = printTable(tableList.get(1), databaseStructures);
+                bufferedWriter.write(table2);
+                System.out.println(table2);
                 bufferedWriter.newLine();
             }
             bufferedWriter.close();
@@ -34,9 +42,7 @@ public class ERDGenerator {
 
     public void generateCardinality (String database, DatabaseStructures databaseStructures) {
         cardinalityList = new ArrayList<>();
-        System.out.println(databaseStructures.foreignKeyMap.size());
         for (Map.Entry<String, List<Map<String, String>>> map : databaseStructures.foreignKeyMap.entrySet()) {
-            System.out.println(map.getKey());
             String tableName = map.getKey();
             if (!isTableEmpty(database, tableName)) {
                 for (Map<String, String> foreignKey : map.getValue()) {
@@ -70,5 +76,27 @@ public class ERDGenerator {
             System.out.println("Exception in reading table file : "+io.getMessage());
         }
         return true;
+    }
+
+    private String printTable (String table, DatabaseStructures databaseStructures) {
+        Map<String, Map<String, String>> tableStructures = databaseStructures.tableStructures;
+        Map<String, String> primaryKeyMap = databaseStructures.primaryKeyMap;
+        Map<String, List<Map<String, String>>> foreignKeyMap = databaseStructures.foreignKeyMap;
+        StringBuilder printer = new StringBuilder();
+
+        printer.append("------------- TABLE : "+table+" ------------- \n");
+        for (Map.Entry<String, String> map : tableStructures.get(table).entrySet()) {
+            printer.append(map.getKey()+" : "+map.getValue()+"\n");
+        }
+        if (primaryKeyMap.containsKey(table)) {
+            printer.append("PRIMARY KEY : "+primaryKeyMap.get(table)+"\n");
+        }
+        if (foreignKeyMap.containsKey(table)) {
+            List<Map<String, String>> fkList = foreignKeyMap.get(table);
+            for (Map<String, String> fk : fkList) {
+                printer.append("FOREGIN KEY : "+fk.get("column")+" REFERENCES "+fk.get("refTable")+"("+fk.get("refTableColumn")+")"+"\n");
+            }
+        }
+        return printer.toString();
     }
 }
