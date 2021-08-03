@@ -3,11 +3,15 @@ package sql.processor;
 import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
+import sql.QueryValidator;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class UpdateProcessor {
     LockManager lockManager = new LockManager();
+    QueryValidator queryValidator = new QueryValidator();
 
     public String process (Query queryObj, DatabaseStructures databaseStructures) {
         String databaseName = databaseStructures.databaseName;
@@ -24,6 +28,7 @@ public class UpdateProcessor {
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
         String primaryKeyColumn = databaseStructures.primaryKeyMap.get(tableName);
+        Map<String, String> tbStructure = databaseStructures.tableStructures.get(tableName);
         Set<String> uniqueKeyValues = new HashSet<>();
         for (Map<String, String> record : tableData) {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
@@ -52,7 +57,29 @@ public class UpdateProcessor {
                         return "** PRIMARY KEY CONSTRAINT VIOLATED **";
                     }
                 }
-                row.put(entry.getKey(), entry.getValue());
+                if (tbStructure.get(entry.getKey()).equals("int")) {
+                    if (queryValidator.isInteger(entry.getValue())) {
+                        row.put(entry.getKey(), entry.getValue());
+                    }
+                    else {
+                        lockManager.releaseLock(databaseName,tableName);
+                        System.out.println("** DATATYPE CONSTRAINT VIOLATED - Expected INT **");
+                        return "** DATATYPE CONSTRAINT VIOLATED - Expected INT **";
+                    }
+                }
+                else if (tbStructure.get(entry.getKey()).equals("varchar")) {
+                    if (queryValidator.isVarchar(entry.getValue())) {
+                        row.put(entry.getKey(), entry.getValue().replaceAll("\\'", ""));
+                    }
+                    else {
+                        System.out.println("inside else");
+                        // release locks
+                        lockManager.releaseLock(databaseName,tableName);
+                        System.out.println("** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **");
+                        return "** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **";
+                    }
+                }
+
             }
             tableData.set(i, row);
         }
