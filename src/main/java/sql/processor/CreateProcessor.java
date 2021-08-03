@@ -7,7 +7,7 @@ import sql.Query;
 import java.io.*;
 
 public class CreateProcessor {
-    public void createtable(Query queryObj, DatabaseStructures databaseStructures) {
+    public String createtable(Query queryObj, DatabaseStructures databaseStructures) {
         //TODO: CREATE TABLE
         // ADD DATA TO  METADATA FILE
         // ADD NEW FILE WITH TABLENAME.TXT AND CLOUMNNAME
@@ -35,10 +35,10 @@ public class CreateProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
+        return "Operation done";
     }
 
-    public void createdb(Query queryObj, DatabaseStructures databaseStructures) {
+    public String createdb(Query queryObj, DatabaseStructures databaseStructures) {
         //TODO: CREATE DB
         //  append db name to databases.txt
         //	create directory
@@ -82,5 +82,6 @@ public class CreateProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return "Operation done";
     }
 }
