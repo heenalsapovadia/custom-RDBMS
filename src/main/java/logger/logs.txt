@@ -182,3 +182,29 @@ use
 Database set : company
 Time Elapsed : PT0.048436S
 
+Query Submission TimeStamp : 2021-08-03T21:38:32.508027304Z
+use
+Database set : company
+Time Elapsed : PT0.06150963S
+
+Query Submission TimeStamp : 2021-08-03T21:38:46.272001749Z
+create
+
+Time Elapsed : PT0.008343603S
+
+Query Submission TimeStamp : 2021-08-03T21:40:15.080435623Z
+use
+Database set : company
+Time Elapsed : PT0.044444554S
+
+Query Submission TimeStamp : 2021-08-03T21:40:23.964998470Z
+Query Submission TimeStamp : 2021-08-03T21:43:13.439462928Z
+use
+Database set : company
+Time Elapsed : PT0.052901485S
+
+Query Submission TimeStamp : 2021-08-03T21:43:20.323001600Z
+create
+Operation done
+Time Elapsed : PT0.008767295S
+
