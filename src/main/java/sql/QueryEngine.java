@@ -86,13 +86,19 @@ public class QueryEngine {
                         queryObj = queryParser.createParser(query);
                         CreateProcessor createProcessor = new CreateProcessor();
                         if(queryObj.getType().equals("database")){
-                            createProcessor.createdb(queryObj, databaseStructures);
-                            System.out.println("Database Created");
-                        }
+                            message = createProcessor.createdb(queryObj, databaseStructures);
+                            logGenerator.log(queryType);
+                            end = Instant.now();
+                            logGenerator.log(message);                        }
                         if(queryObj.getType().equals("table")){
-                            createProcessor.createtable(queryObj,databaseStructures);
+                            message = createProcessor.createtable(queryObj,databaseStructures);
                             System.out.println("Table Created");
+                            logGenerator.log(queryType);
+                            end = Instant.now();
+                            logGenerator.log(message);
                         }
+
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
 
                     case "select" :
@@ -129,7 +135,11 @@ public class QueryEngine {
                     case "delete" :
                         queryObj = queryParser.deleteParser(query);
                         DeleteProcessor deleteProcessor = new DeleteProcessor();
-                        deleteProcessor.process(queryObj, databaseStructures);
+                        message = deleteProcessor.process(queryObj, databaseStructures);
+                        logGenerator.log(queryType);
+                        end = Instant.now();
+                        logGenerator.log(message);
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
                         break;
                 }
                 System.out.println(message);
