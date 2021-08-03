@@ -2,24 +2,15 @@ Query Submission TimeStamp : 2021-08-02T23:11:41.091486Z
 ** DATABASE NOT SELECTED **
 Time Elapsed : PT0.022943S
 
-Query Submission TimeStamp : 2021-08-02T23:11:44.850371Z
 Query Submission TimeStamp : 2021-08-03T09:58:04.615184Z
 ** DATABASE NOT SELECTED **
 Time Elapsed : PT0.032291S
 
-Query Submission TimeStamp : 2021-08-03T09:58:08.596778Z
 Query Submission TimeStamp : 2021-08-03T09:58:18.261893Z
 select
 Rows returned : 6
 Time Elapsed : PT0.02279S
 
-Query Submission TimeStamp : 2021-08-03T09:58:34.993487Z
-Query Submission TimeStamp : 2021-08-03T09:59:51.236263Z
-Query Submission TimeStamp : 2021-08-03T10:00:25.470503Z
-Query Submission TimeStamp : 2021-08-03T10:01:33.617600Z
-Query Submission TimeStamp : 2021-08-03T10:03:03.663877Z
-Query Submission TimeStamp : 2021-08-03T10:03:08.303261Z
-Query Submission TimeStamp : 2021-08-03T10:03:29.178511Z
 Query Submission TimeStamp : 2021-08-03T10:03:35.771075Z
 select
 Rows returned : 6
@@ -54,13 +45,10 @@ Query Submission TimeStamp : 2021-08-03T10:05:12.360639Z
 EXIT
 Time Elapsed : PT0.001515S
 
-Query Submission TimeStamp : 2021-08-03T10:10:50.468009Z
-Query Submission TimeStamp : 2021-08-03T10:11:05.031255Z
 Query Submission TimeStamp : 2021-08-03T10:11:18.677035Z
 ** DATABASE NOT SELECTED **
 Time Elapsed : PT0.022086S
 
-Query Submission TimeStamp : 2021-08-03T10:11:23.113565Z
 Query Submission TimeStamp : 2021-08-03T10:11:42.839266Z
 insert
 Successfully Inserted 1 row
@@ -74,4 +62,123 @@ Time Elapsed : PT0.018087S
 Query Submission TimeStamp : 2021-08-03T10:12:01.501166Z
 EXIT
 Time Elapsed : PT0.001041S
+
+Query Submission TimeStamp : 2021-08-03T12:15:17.726954Z
+use
+Database set : halifax
+Time Elapsed : PT0.022008S
+
+Query Submission TimeStamp : 2021-08-03T12:17:23.509017Z
+use
+Database set : halifax
+Time Elapsed : PT0.026324S
+
+Query Submission TimeStamp : 2021-08-03T12:17:28.838003Z
+create
+
+Time Elapsed : PT0.007273S
+
+Query Submission TimeStamp : 2021-08-03T12:22:13.047936Z
+** DATABASE NOT SELECTED **
+Time Elapsed : PT0.009252S
+
+Query Submission TimeStamp : 2021-08-03T12:22:34.517773Z
+use
+Database set : company
+Time Elapsed : PT0.010577S
+
+Query Submission TimeStamp : 2021-08-03T12:23:07.147198Z
+create
+Operation done
+Time Elapsed : PT0.004759S
+
+Query Submission TimeStamp : 2021-08-03T12:23:25.346351Z
+create
+
+Time Elapsed : PT0.002019S
+
+Query Submission TimeStamp : 2021-08-03T12:24:07.491604Z
+select
+Rows returned : 7
+Time Elapsed : PT0.019364S
+
+Query Submission TimeStamp : 2021-08-03T12:24:34.566096Z
+update
+** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **
+Time Elapsed : PT0.009361S
+
+Query Submission TimeStamp : 2021-08-03T12:24:54.299615Z
+update
+Successfully Updated 3 rows
+Time Elapsed : PT0.029329S
+
+Query Submission TimeStamp : 2021-08-03T12:25:09.003931Z
+select
+Rows returned : 1
+Time Elapsed : PT0.001628S
+
+Query Submission TimeStamp : 2021-08-03T12:25:47.440925Z
+update
+** PRIMARY KEY CONSTRAINT VIOLATED **
+Time Elapsed : PT0.023252S
+
+Query Submission TimeStamp : 2021-08-03T12:56:46.264655Z
+use
+Database set : company
+Time Elapsed : PT0.067424S
+
+Query Submission TimeStamp : 2021-08-03T12:56:55.095192Z
+select
+Rows returned : 7
+Time Elapsed : PT0.011882S
+
+Query Submission TimeStamp : 2021-08-03T12:57:13.141144Z
+select
+Rows returned : 1
+Time Elapsed : PT0.002487S
+
+Query Submission TimeStamp : 2021-08-03T12:57:39.477528Z
+update
+** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **
+Time Elapsed : PT0.010494S
+
+Query Submission TimeStamp : 2021-08-03T12:58:58.086875Z
+use
+Database set : company
+Time Elapsed : PT0.045354S
+
+Query Submission TimeStamp : 2021-08-03T12:59:19.640156Z
+Query Submission TimeStamp : 2021-08-03T12:59:42.558455Z
+use
+Database set : company
+Time Elapsed : PT0.021727S
+
+Query Submission TimeStamp : 2021-08-03T13:00:03.884076Z
+update
+** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **
+Time Elapsed : PT0.041832S
+
+Query Submission TimeStamp : 2021-08-03T13:00:26.291279Z
+select
+Rows returned : 7
+Time Elapsed : PT0.03427S
+
+Query Submission TimeStamp : 2021-08-03T13:02:03.388773Z
+use
+Database set : company
+Time Elapsed : PT0.047193S
+
+Query Submission TimeStamp : 2021-08-03T13:02:16.560737Z
+select
+Rows returned : 7
+Time Elapsed : PT0.029844S
+
+Query Submission TimeStamp : 2021-08-03T13:02:26.992298Z
+EXIT
+Time Elapsed : PT0.001177S
+
+Query Submission TimeStamp : 2021-08-03T13:14:33.035512Z
+use
+Database set : company
+Time Elapsed : PT0.048436S
 

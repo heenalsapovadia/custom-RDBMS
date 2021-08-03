@@ -3,21 +3,16 @@ package sql.processor;
 import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
-import sql.QueryValidator;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-public class UpdateProcessor {
+public class DeleteProcessor {
     LockManager lockManager = new LockManager();
-    QueryValidator queryValidator = new QueryValidator();
 
     public String process (Query queryObj, DatabaseStructures databaseStructures) {
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
 
-        // check for locks and apply lock
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
             // return appropriate message for log
             return "** LOCK CONSTRAINT : "+tableName;
@@ -28,7 +23,6 @@ public class UpdateProcessor {
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
         String primaryKeyColumn = databaseStructures.primaryKeyMap.get(tableName);
-        Map<String, String> tbStructure = databaseStructures.tableStructures.get(tableName);
         Set<String> uniqueKeyValues = new HashSet<>();
         for (Map<String, String> record : tableData) {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
@@ -53,41 +47,21 @@ public class UpdateProcessor {
                     if (uniqueKeyValues.contains(entry.getValue())) {
                         // release locks
                         lockManager.releaseLock(databaseName,tableName);
-//                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
+                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
                         return "** PRIMARY KEY CONSTRAINT VIOLATED **";
                     }
                 }
-                if (tbStructure.get(entry.getKey()).equals("int")) {
-                    if (queryValidator.isInteger(entry.getValue())) {
-                        row.put(entry.getKey(), entry.getValue());
-                    }
-                    else {
-                        lockManager.releaseLock(databaseName,tableName);
-                        return "** DATATYPE CONSTRAINT VIOLATED - Expected INT **";
-                    }
-                }
-                else if (tbStructure.get(entry.getKey()).equals("varchar")) {
-                    if (queryValidator.isVarchar(entry.getValue())) {
-                        row.put(entry.getKey(), entry.getValue().replaceAll("\\'", ""));
-                    }
-                    else {
-                        System.out.println("inside else");
-                        // release locks
-                        lockManager.releaseLock(databaseName,tableName);
-                        return "** DATATYPE CONSTRAINT VIOLATED - Expected VARCHAR [''] **";
-                    }
-                }
-
+                row.put(entry.getKey(), entry.getValue());
             }
             tableData.set(i, row);
         }
-        databaseStructures.databaseData.put(tableName, tableData);
+        databaseStructures.databaseData.remove(tableName, tableData);
         //write the updated value in db
-        databaseStructures.storeDatabase("update", tableName);
+        databaseStructures.storeDatabase("delete", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
 
-        return "Successfully Updated "+3+" rows";
+        return "Successfully Deleted";
     }
 }

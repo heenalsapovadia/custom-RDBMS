@@ -7,9 +7,16 @@ public class Query {
     private String tableName;
     private String columns;
     private String condition;
+    private String type;
     private Map<String, String> conditionMap;
     private Map<String, String> optionMap;
     private Map<String, String> valueMap;
+
+    public String getType(){return type;}
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public String getDatabaseName() {
         return databaseName;

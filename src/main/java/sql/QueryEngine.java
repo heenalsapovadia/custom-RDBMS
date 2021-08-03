@@ -1,6 +1,8 @@
 package sql;
 
 import databaseFiles.DatabaseStructures;
+import sql.processor.CreateProcessor;
+import sql.processor.DeleteProcessor;
 import logger.LogGenerator;
 import sql.processor.InsertProcessor;
 import sql.processor.SelectProcessor;
@@ -72,6 +74,7 @@ public class QueryEngine {
                         queryObj = queryParser.useParser(query);
                         UseProcessor useProcessor = new UseProcessor();
                         String databaseName = useProcessor.process(queryObj, databaseStructures);
+//                        System.out.println(databaseName);
                         databaseStructures.loadDatabase(databaseName);
                         message = "Database set : "+databaseName;
                         logGenerator.log(queryType);
@@ -81,7 +84,23 @@ public class QueryEngine {
                         break;
 
                     case "create" :
-//                        queryObj = queryParser.createParser(query);
+                        queryObj = queryParser.createParser(query);
+                        CreateProcessor createProcessor = new CreateProcessor();
+                        if(queryObj.getType().equals("database")){
+                            message = createProcessor.createdb(queryObj, databaseStructures);
+                            logGenerator.log(queryType);
+                            end = Instant.now();
+                            logGenerator.log(message);                        }
+                        if(queryObj.getType().equals("table")){
+//                            message = createProcessor.createtable(queryObj,databaseStructures);
+                            System.out.println("Table Created");
+                            logGenerator.log(queryType);
+                            end = Instant.now();
+                            logGenerator.log(message);
+                        }
+
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
+                        break;
 
                     case "select" :
                         System.out.println("Insie select");
@@ -115,8 +134,16 @@ public class QueryEngine {
                         break;
 
                     case "delete" :
+                        queryObj = queryParser.deleteParser(query);
+                        DeleteProcessor deleteProcessor = new DeleteProcessor();
+                        message = deleteProcessor.process(queryObj, databaseStructures);
+                        logGenerator.log(queryType);
+                        end = Instant.now();
+                        logGenerator.log(message);
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
+                        break;
                 }
-                System.out.println(message);
+                System.out.println(message+"\n");
             }
 
         }
