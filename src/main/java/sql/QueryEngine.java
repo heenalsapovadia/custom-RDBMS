@@ -71,7 +71,8 @@ public class QueryEngine {
                         System.out.println("Insie use");
                         queryObj = queryParser.useParser(query);
                         UseProcessor useProcessor = new UseProcessor();
-                        databaseStructures = useProcessor.process(queryObj, databaseStructures);
+                        String databaseName = useProcessor.process(queryObj, databaseStructures);
+                        databaseStructures.loadDatabase(databaseName);
                         //System.out.println(message);
                         break;
 
