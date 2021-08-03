@@ -27,7 +27,7 @@ public class DeleteProcessor {
         for (Map<String, String> record : tableData) {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
         }
-
+        List<Integer> indexToRemove = new ArrayList<>();
         // for loop over tableData - update the ds
         for (int i=0; i<tableData.size(); i++) {
             Map<String, String> row = tableData.get(i);
@@ -42,22 +42,16 @@ public class DeleteProcessor {
                 if (!conditionPass)
                     continue;
             }
-            for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
-                if (entry.getKey().equals(primaryKeyColumn)) {
-                    if (uniqueKeyValues.contains(entry.getValue())) {
-                        // release locks
-                        lockManager.releaseLock(databaseName,tableName);
-                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
-                        return "** PRIMARY KEY CONSTRAINT VIOLATED **";
-                    }
-                }
-                row.put(entry.getKey(), entry.getValue());
-            }
-            tableData.set(i, row);
+            indexToRemove.add(i);
         }
-        databaseStructures.databaseData.remove(tableName, tableData);
+        for (int i= indexToRemove.size()-1; i>=0; i--) {
+            tableData.remove(indexToRemove.get(i));
+            System.out.println(tableData.size());
+        }
+        databaseStructures.databaseData.put(tableName, tableData);
+//        databaseStructures.databaseData.remove(tableName, tableData);
         //write the updated value in db
-        databaseStructures.storeDatabase("delete", tableName);
+        databaseStructures.storeDatabase("update", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
