@@ -3,22 +3,25 @@ package sql.processor;
 import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
+import sql.QueryValidator;
 
 import java.util.*;
 
 public class DeleteProcessor {
     LockManager lockManager = new LockManager();
+    QueryValidator queryValidator = new QueryValidator();
+    public String logMessage = "";
 
-    public String process (Query queryObj, DatabaseStructures databaseStructures) {
+    public DatabaseStructures process (Query queryObj, DatabaseStructures databaseStructures) {
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
 
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
             // return appropriate message for log
-            return "** LOCK CONSTRAINT : "+tableName;
+            logMessage = "** LOCK CONSTRAINT : "+tableName;
+            return null;
         }
 
-        Map<String, String> optionsMap = queryObj.getOptionMap();
         Map<String, String> conditionMap = queryObj.getConditionMap();
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
@@ -27,7 +30,7 @@ public class DeleteProcessor {
         for (Map<String, String> record : tableData) {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
         }
-
+        List<Integer> indexToRemove = new ArrayList<>();
         // for loop over tableData - update the ds
         for (int i=0; i<tableData.size(); i++) {
             Map<String, String> row = tableData.get(i);
@@ -42,26 +45,19 @@ public class DeleteProcessor {
                 if (!conditionPass)
                     continue;
             }
-            for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
-                if (entry.getKey().equals(primaryKeyColumn)) {
-                    if (uniqueKeyValues.contains(entry.getValue())) {
-                        // release locks
-                        lockManager.releaseLock(databaseName,tableName);
-                        System.out.println("** PRIMARY KEY CONSTRAINT VIOLATED **");
-                        return "** PRIMARY KEY CONSTRAINT VIOLATED **";
-                    }
-                }
-                row.put(entry.getKey(), entry.getValue());
-            }
-            tableData.set(i, row);
+            indexToRemove.add(i);
         }
-        databaseStructures.databaseData.remove(tableName, tableData);
-        //write the updated value in db
-        databaseStructures.storeDatabase("delete", tableName);
+        for (int i= indexToRemove.size()-1; i>=0; i--) {
+            System.out.println("index :"+indexToRemove.get(i));
+            System.out.println(tableData.remove(tableData.get(indexToRemove.get(i))));
+            System.out.println(tableData.size());
+        }
+        databaseStructures.databaseData.put(tableName, tableData);
+//        databaseStructures.storeDatabase("update", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
-
-        return "Successfully Deleted";
+        logMessage = "Deleted "+indexToRemove.size()+" rows";
+        return databaseStructures;
     }
 }

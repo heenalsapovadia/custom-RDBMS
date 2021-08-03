@@ -87,8 +87,6 @@ public class UpdateProcessor {
             rowsModified++;
         }
         databaseStructures.databaseData.put(tableName, tableData);
-        //write the updated value in db
-//        databaseStructures.storeDatabase("update", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);

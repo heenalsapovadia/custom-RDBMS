@@ -64,6 +64,15 @@ public class TransactionProcessor {
                     break;
 
                 case "delete":
+                    queryObj = queryParser.deleteParser(query);
+                    DeleteProcessor deleteProcessor = new DeleteProcessor();
+                    DatabaseStructures deletedStructures = deleteProcessor.process(queryObj, databaseStructures);
+                    if (deletedStructures==null) {
+                        errorQuery = "DELETE";
+                        break;
+                    }
+                    transactionLog.append("DELETE : "+deleteProcessor.logMessage+"\n");
+                    tablesUpdated.add(queryObj.getTableName());
                     break;
 
                 case "rollback":
