@@ -180,7 +180,7 @@ public class QueryParser {
         Pattern pattern = Pattern.compile("delete\\s+(.*)\\s+from\\s+(.*)");
         Pattern wherePart = Pattern.compile("where\\s+(.*)");
 
-        Matcher matcher = pattern.matcher(query);
+        Matcher matcher = pattern.matcher(query_removed);
 
         matcher.find();
         String tableName = matcher.group(1);
@@ -215,8 +215,6 @@ public class QueryParser {
 
         queryOBJ.setOptionMap(optionsMap);
         queryOBJ.setTableName(tableName);
-        // BUG: How to pass the column name
-        // TODO: PASS THE COLUMN NAME
         return  queryOBJ;
     }
 }

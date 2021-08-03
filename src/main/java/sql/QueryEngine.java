@@ -129,7 +129,7 @@ public class QueryEngine {
                     case "delete" :
                         queryObj = queryParser.deleteParser(query);
                         DeleteProcessor deleteProcessor = new DeleteProcessor();
-                        deleteProcessor.delete(queryObj, databaseStructures);
+                        deleteProcessor.process(queryObj, databaseStructures);
                         break;
                 }
                 System.out.println(message);
