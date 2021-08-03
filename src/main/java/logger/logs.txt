@@ -75,3 +75,33 @@ Query Submission TimeStamp : 2021-08-03T10:12:01.501166Z
 EXIT
 Time Elapsed : PT0.001041S
 
+Query Submission TimeStamp : 2021-08-03T21:06:26.691372654Z
+** INVALID SQL QUERY **
+Time Elapsed : PT0.019101154S
+
+Query Submission TimeStamp : 2021-08-03T21:06:33.419169164Z
+use
+Database set : company
+Time Elapsed : PT0.040204517S
+
+Query Submission TimeStamp : 2021-08-03T21:07:02.726115156Z
+Query Submission TimeStamp : 2021-08-03T21:13:25.657692194Z
+use
+Database set : company
+Time Elapsed : PT0.052061894S
+
+Query Submission TimeStamp : 2021-08-03T21:13:30.835489984Z
+create
+Operation done
+Time Elapsed : PT0.025585318S
+
+Query Submission TimeStamp : 2021-08-03T21:16:38.990868237Z
+use
+Database set : company
+Time Elapsed : PT0.049581906S
+
+Query Submission TimeStamp : 2021-08-03T21:16:41.469687207Z
+create
+Operation done
+Time Elapsed : PT0.065199609S
+

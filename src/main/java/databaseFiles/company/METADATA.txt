@@ -1,2 +1,4 @@
 employee = { id:int, name:varchar, deptId:int } | { PK:id - FK:(deptId?department?id) }
 department = { id:int, name:varchar } | { PK:id }
+employee = { name:varchar, deptId:int, id:int } | { PK:id - FK:(deptId?department?id) }
+employee = { name:varchar, deptId:int, id:int } | { PK:id - FK:(deptId?department?id) }

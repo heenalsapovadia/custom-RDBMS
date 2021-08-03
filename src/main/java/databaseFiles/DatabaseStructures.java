@@ -156,7 +156,7 @@ public class DatabaseStructures {
 
         }
     }
-    private void pushDatabaseData (String tableName) {
+    public void pushDatabaseData (String tableName) {
         File file = new File(pathToDatabases+"/"+databaseName+"/"+tableName+".txt");
         List<Map<String, String>> tableData = databaseData.get(tableName);
         try {
@@ -186,6 +186,47 @@ public class DatabaseStructures {
         }
         catch (IOException io) {
             System.out.println("Exception in reading table file : "+io.getMessage());
+        }
+    }
+
+    public void pushKeys (String tableName) {
+        StringBuilder metadata = new StringBuilder();
+        metadata.append(tableName+" = { ");
+        for (Map.Entry<String, String> map : tableStructures.get(tableName).entrySet()) {
+            metadata.append(map.getKey()+":"+map.getValue()+", ");
+        }
+        metadata = metadata.deleteCharAt(metadata.length()-1); //removing last space
+        metadata = metadata.deleteCharAt(metadata.length()-1); // removing last comma
+        metadata.append(" }");
+
+        if (primaryKeyMap.containsKey(tableName) || foreignKeyMap.containsKey(tableName)) {
+            if (primaryKeyMap.containsKey(tableName)) {
+                metadata.append(" | { PK:" + primaryKeyMap.get(tableName));
+            }
+            if (foreignKeyMap.containsKey(tableName)) {
+                if (metadata.charAt(metadata.length() - 1) == '}') {
+                    metadata.append(" | { FK:(");
+                } else {
+                    metadata.append(" - FK:(");
+                }
+                for (Map<String, String> map : foreignKeyMap.get(tableName)) {
+                    metadata.append(map.get("column") + "?" + map.get("refTable") + "?" + map.get("refTableColumn") + ", ");
+                }
+                metadata = metadata.deleteCharAt(metadata.length() - 1); //removing last space
+                metadata = metadata.deleteCharAt(metadata.length() - 1); // removing last comma
+                metadata.append(")");
+            }
+            metadata.append(" }");
+        }
+        File file = new File(pathToDatabases+"/"+databaseName+"/METADATA.txt");
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file, true));
+            bufferedWriter.newLine();
+            bufferedWriter.write(metadata.toString());
+            bufferedWriter.close();
+        }
+        catch (IOException io) {
+            System.out.println("IO Exception in writing the keys to file "+io.getMessage());
         }
     }
 }

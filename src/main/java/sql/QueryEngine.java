@@ -83,7 +83,7 @@ public class QueryEngine {
                         break;
 
                     case "create" :
-//                        queryObj = queryParser.createParser(query);
+                        queryObj = queryParser.createParser(query);
                         CreateProcessor createProcessor = new CreateProcessor();
                         if(queryObj.getType().equals("database")){
                             message = createProcessor.createdb(queryObj, databaseStructures);

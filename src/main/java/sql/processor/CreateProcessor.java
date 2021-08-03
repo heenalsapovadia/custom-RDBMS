@@ -5,6 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import sql.Query;
 
 import java.io.*;
+import java.util.Map;
 
 public class CreateProcessor {
     public String createtable(Query queryObj, DatabaseStructures databaseStructures) {
@@ -12,19 +13,23 @@ public class CreateProcessor {
         // ADD DATA TO  METADATA FILE
         // ADD NEW FILE WITH TABLENAME.TXT AND CLOUMNNAME
 
+
         String tableName = queryObj.getTableName();
-        String columns = queryObj.getColumns();
-        String[] columnsList = columns.split(",");
+        String databaseName = queryObj.getDatabaseName();
+        Map<String, String> columns = queryObj.getOptionMap();
+        String[] columnsList = null;
         String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
         String makedirectory = "src/main/java/databaseFiles/";
-        String finaldirectoryName = makedirectory + tableName;
+        String finaldirectoryName = makedirectory + databaseName;
         String pathtometadata = finaldirectoryName + "/";
         String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
         String appendingTxt = "";
 
         // TODO append data into METADATA.txt
-        queryObj.getColumns();
+
+        databaseStructures.pushKeys(tableName);
+
 
         // TODO: create newfile with tablename.txt and add coloumname
         appendingTxt = StringUtils.join(columnsList, "|");
