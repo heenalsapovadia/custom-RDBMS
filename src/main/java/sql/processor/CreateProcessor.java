@@ -23,6 +23,9 @@ public class CreateProcessor {
         final String newLine = System.getProperty("line.separator");
 
         // TODO append data into METADATA.txt
+
+
+        // TODO: create newfile with tablename.txt and add coloumname
         String appendingTxt = StringUtils.join(columnsList, "|");
         try {
             FileWriter fw = new FileWriter(finalmetadataPath,true);
@@ -31,9 +34,6 @@ public class CreateProcessor {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-        // TODO: create newfile with tablename.txt and add coloumname
-
 
     }
 
