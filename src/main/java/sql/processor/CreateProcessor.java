@@ -5,6 +5,10 @@ import org.apache.commons.lang3.StringUtils;
 import sql.Query;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class CreateProcessor {
     public String createtable(Query queryObj, DatabaseStructures databaseStructures) {
@@ -12,26 +16,42 @@ public class CreateProcessor {
         // ADD DATA TO  METADATA FILE
         // ADD NEW FILE WITH TABLENAME.TXT AND CLOUMNNAME
 
+
         String tableName = queryObj.getTableName();
-        String columns = queryObj.getColumns();
-        String[] columnsList = columns.split(",");
+        String databaseName = queryObj.getDatabaseName();
+        Map<String, String> columns = queryObj.getOptionMap();
+        String[] columnsList = null;
         String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
         String makedirectory = "src/main/java/databaseFiles/";
-        String finaldirectoryName = makedirectory + tableName;
+        String finaldirectoryName = makedirectory + databaseName;
         String pathtometadata = finaldirectoryName + "/";
         String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
         String appendingTxt = "";
 
         // TODO append data into METADATA.txt
-        queryObj.getColumns();
+        databaseStructures.primaryKeyMap.put(tableName, queryObj.getPrimarykey());
+        List<Map<String, String>> fkList = new ArrayList<>();
+        fkList.add(queryObj.getFKMap());
+        databaseStructures.foreignKeyMap.put(tableName, fkList);
+        databaseStructures.tableStructures.put(tableName, queryObj.getOptionMap());
+        databaseStructures.pushKeys(tableName);
+
 
         // TODO: create newfile with tablename.txt and add coloumname
-        appendingTxt = StringUtils.join(columnsList, "|");
+        String newTablePath = makedirectory+databaseStructures.databaseName+"/"+tableName+".txt";
+        Set<String> colSet = queryObj.getOptionMap().keySet();
+        StringBuilder columnHeader = new StringBuilder();
+        for (String str : colSet) {
+            columnHeader.append(str+"|");
+        }
+        columnHeader.deleteCharAt(columnHeader.length()-1);
+
+//        appendingTxt = StringUtils.join(columnsList, "|");
         try {
-            FileWriter fw = new FileWriter(finalmetadataPath,true);
-            fw.write(appendingTxt);
-            fw.close();
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(newTablePath));
+            bufferedWriter.write(columnHeader.toString());
+            bufferedWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

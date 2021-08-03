@@ -1,5 +1,6 @@
 package sql;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class Query {
@@ -8,9 +9,43 @@ public class Query {
     private String columns;
     private String condition;
     private String type;
+    private String primarykey;
     private Map<String, String> conditionMap;
     private Map<String, String> optionMap;
     private Map<String, String> valueMap;
+    private Map<String,String> FKMap = new HashMap<>();
+    private Map<String, String> columnNameType;
+
+    //TODO: MAKE SETERS
+
+
+    public Map<String, String> getFKMap() {
+        return FKMap;
+    }
+
+    public void setFKMap(Map<String, String> FKMap) {
+        this.FKMap = FKMap;
+    }
+
+    public String getPrimarykey() {
+        return primarykey;
+    }
+
+    public void setPrimarykey(String primarykey) {
+        this.primarykey = primarykey;
+    }
+
+    public Map<String, String> getColumnNameType() {
+        return columnNameType;
+    }
+
+    public Map<String, String> getValueMap() {
+        return valueMap;
+    }
+
+    public void setColumnNameType(Map<String, String> columnNameType) {
+        this.columnNameType = columnNameType;
+    }
 
     public String getType(){return type;}
 

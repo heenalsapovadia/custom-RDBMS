@@ -83,7 +83,7 @@ public class QueryEngine {
                             logGenerator.log(message);
                         }
                         if(queryObj.getType().equals("table")){
-//                            message = createProcessor.createtable(queryObj,databaseStructures);
+                            message = createProcessor.createtable(queryObj,databaseStructures);
                             System.out.println("Table Created");
                             logGenerator.log(queryType);
                             end = Instant.now();
