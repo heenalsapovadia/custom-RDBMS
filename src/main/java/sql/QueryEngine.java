@@ -2,8 +2,10 @@ package sql;
 
 import databaseFiles.DatabaseStructures;
 import logger.LogGenerator;
+import sql.processor.InsertProcessor;
 import sql.processor.SelectProcessor;
 import sql.processor.UpdateProcessor;
+import sql.processor.UseProcessor;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -60,15 +62,29 @@ public class QueryEngine {
                 //call sql parsers
                 QueryParser queryParser = new QueryParser();
                 Query queryObj = new Query();
-                String message;
+                String message="";
                 // call sql query execution
+                //queryType="use";
                 switch (queryType) {
                     case "use" :
                         // load tableData
+                        System.out.println("Insie use");
+                        queryObj = queryParser.useParser(query);
+                        UseProcessor useProcessor = new UseProcessor();
+                        String databaseName = useProcessor.process(queryObj, databaseStructures);
+                        databaseStructures.loadDatabase(databaseName);
+                        message = "Database set : "+databaseName;
+                        logGenerator.log(queryType);
+                        end = Instant.now();
+                        logGenerator.log(message);
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
+                        break;
+
                     case "create" :
 //                        queryObj = queryParser.createParser(query);
 
                     case "select" :
+                        System.out.println("Insie select");
                         queryObj = queryParser.selectParser(query);
                         SelectProcessor selectProcessor = new SelectProcessor();
                         message = selectProcessor.process(queryObj, databaseStructures);
@@ -79,6 +95,14 @@ public class QueryEngine {
                         break;
 
                     case "insert" :
+                        queryObj = queryParser.insertParser(query);
+                        InsertProcessor insertProcessor = new InsertProcessor();
+                        message=insertProcessor.process(queryObj,databaseStructures);
+                        logGenerator.log(queryType);
+                        end = Instant.now();
+                        logGenerator.log(message);
+                        logGenerator.log("Time Elapsed : "+Duration.between(start, end)+"\n");
+                        break;
 
                     case "update" :
                         queryObj = queryParser.updateParser(query);
@@ -92,9 +116,9 @@ public class QueryEngine {
 
                     case "delete" :
                 }
-
+                System.out.println(message);
             }
-            System.out.println("--------------END OF QUERY------------");
+
         }
     }
 

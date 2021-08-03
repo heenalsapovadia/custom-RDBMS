@@ -3,11 +3,21 @@ package sql;
 import java.util.Map;
 
 public class Query {
+    private String databaseName;
     private String tableName;
     private String columns;
     private String condition;
     private Map<String, String> conditionMap;
     private Map<String, String> optionMap;
+    private Map<String, String> valueMap;
+
+    public String getDatabaseName() {
+        return databaseName;
+    }
+
+    public void setDatabaseName(String databaseName) {
+        this.databaseName = databaseName;
+    }
 
     public String getTableName() {
         return tableName;
@@ -47,5 +57,10 @@ public class Query {
 
     public void setOptionMap(Map<String, String> optionMap) {
         this.optionMap = optionMap;
+    }
+
+    public void setValueMap(Map<String,String> valueMap)
+    {
+        this.valueMap=valueMap;
     }
 }
