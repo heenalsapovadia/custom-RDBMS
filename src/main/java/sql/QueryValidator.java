@@ -31,9 +31,10 @@ public class QueryValidator {
         try {
             Pattern pattern = Pattern.compile("'(.*)'");
             Matcher matcher = pattern.matcher(value);
-            matcher.find();
-            System.out.println(matcher.group(1));
-            return true;
+            if (matcher.find())
+                return true;
+            else
+                return false;
         }
         catch (Exception e) {
             return false;

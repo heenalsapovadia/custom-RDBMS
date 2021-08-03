@@ -25,6 +25,7 @@ public class SQLDumpGenerator {
             }
             bufferedWriter.write(insertQuery(database));
             bufferedWriter.close();
+            System.out.println("SQL DUMP has been generated - You can access it at 'src/main/java/SQLDump'");
         }
         catch (IOException io) {
             System.out.println("IO Exception in reading file for SQL DUmp generation : "+io.getMessage());
