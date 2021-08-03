@@ -3,22 +3,25 @@ package sql.processor;
 import databaseFiles.DatabaseStructures;
 import sql.LockManager;
 import sql.Query;
+import sql.QueryValidator;
 
 import java.util.*;
 
 public class DeleteProcessor {
     LockManager lockManager = new LockManager();
+    QueryValidator queryValidator = new QueryValidator();
+    public String logMessage = "";
 
-    public String process (Query queryObj, DatabaseStructures databaseStructures) {
+    public DatabaseStructures process (Query queryObj, DatabaseStructures databaseStructures) {
         String databaseName = databaseStructures.databaseName;
         String tableName = queryObj.getTableName();
 
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
             // return appropriate message for log
-            return "** LOCK CONSTRAINT : "+tableName;
+            logMessage = "** LOCK CONSTRAINT : "+tableName;
+            return null;
         }
 
-        Map<String, String> optionsMap = queryObj.getOptionMap();
         Map<String, String> conditionMap = queryObj.getConditionMap();
 
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
@@ -45,17 +48,16 @@ public class DeleteProcessor {
             indexToRemove.add(i);
         }
         for (int i= indexToRemove.size()-1; i>=0; i--) {
-            tableData.remove(indexToRemove.get(i));
+            System.out.println("index :"+indexToRemove.get(i));
+            System.out.println(tableData.remove(tableData.get(indexToRemove.get(i))));
             System.out.println(tableData.size());
         }
         databaseStructures.databaseData.put(tableName, tableData);
-//        databaseStructures.databaseData.remove(tableName, tableData);
-        //write the updated value in db
-        databaseStructures.storeDatabase("update", tableName);
+//        databaseStructures.storeDatabase("update", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
-
-        return "Successfully Deleted";
+        logMessage = "Deleted "+indexToRemove.size()+" rows";
+        return databaseStructures;
     }
 }
