@@ -12,3 +12,4 @@ insert into department (id, name) values (2, research)
 insert into department (id, name) values (3, marketing)
 insert into department (id, name) values (4, hr)
 insert into department (id, name) values (5, production)
+
