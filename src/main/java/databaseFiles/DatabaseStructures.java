@@ -25,6 +25,7 @@ public class DatabaseStructures {
     Loads the database structures from files
      */
     public void loadDatabase (String databaseName) {
+        this.databaseName =databaseName;
         File dir = new File(pathToDatabases+"/"+databaseName);
         /*
         load databaseData
