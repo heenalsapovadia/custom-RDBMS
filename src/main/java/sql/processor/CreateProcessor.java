@@ -21,12 +21,13 @@ public class CreateProcessor {
         String pathtometadata = finaldirectoryName + "/";
         String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
+        String appendingTxt = "";
 
         // TODO append data into METADATA.txt
-
+        queryObj.getColumns();
 
         // TODO: create newfile with tablename.txt and add coloumname
-        String appendingTxt = StringUtils.join(columnsList, "|");
+        appendingTxt = StringUtils.join(columnsList, "|");
         try {
             FileWriter fw = new FileWriter(finalmetadataPath,true);
             fw.write(appendingTxt);
@@ -43,12 +44,10 @@ public class CreateProcessor {
         //	create directory
         //	create empty metadata.txt in directory
 
-        String tableName = queryObj.getTableName();
-        String columns = queryObj.getColumns();
-        String[] columnsList = columns.split(",");
+        String dbName = databaseStructures.databaseName;
         String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
         String makedirectory = "src/main/java/databaseFiles/";
-        String finaldirectoryName = makedirectory + tableName;
+        String finaldirectoryName = makedirectory + dbName;
         String pathtometadata = finaldirectoryName + "/";
         String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
@@ -59,7 +58,7 @@ public class CreateProcessor {
         try {
             if (!file1.exists()) file1.createNewFile();
             printWriter = new PrintWriter(new FileOutputStream(pathtodbFiles, true));
-            printWriter.write(newLine + tableName);
+            printWriter.write(newLine + dbName);
         } catch (IOException ioex) {
             ioex.printStackTrace();
         } finally {
@@ -72,7 +71,7 @@ public class CreateProcessor {
         // Create empty directory
         File directory = new File(finaldirectoryName);
         directory.mkdir();
-        System.out.println("Directory " + tableName + " created");
+        System.out.println("Directory " + dbName + " created");
 
         // Create empty metadata file
         File file2 = new File(finalmetadataPath);
