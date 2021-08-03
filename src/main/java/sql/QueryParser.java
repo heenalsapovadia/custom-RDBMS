@@ -9,7 +9,36 @@ public class QueryParser {
 
     public Query createParser(String query) {
         Query queryObj = new Query();
+        query = query.replaceAll(";", "");
+        query = query.replaceAll(",", " ");
+        query = query.replaceAll("[^a-zA-Z ]", "");
+        String[] sqlWords = query.split(" ");
+
+        String action = sqlWords[0];
+        String type = sqlWords[1];
+        String name = sqlWords[2];
+        String location = sqlWords[3];
+
+        queryObj.setType(type);
+        queryObj.setTableName(name);
         return queryObj;
+    }
+
+    public Query useParser(String queryString)
+    {
+        queryString = queryString.replaceAll(";", "");
+        String[] sql = queryString.split(" ");
+
+        //logger.info("Parsing Query:"+query);
+        //String action = sql[0];
+        String databaseName = sql[1];
+
+        //logger.info("Converting SQL query to internal query form");
+        Query query = new Query();
+        // Query.set("action",action);
+        query.setDatabaseName(databaseName);
+
+        return query;
     }
 
     public Query selectParser (String queryString) {
@@ -51,7 +80,51 @@ public class QueryParser {
         return queryObj;
     }
 
-    public void insertParser (String query) {
+    public Query insertParser (String queryString) {
+
+        Query queryObj = new Query();
+        queryString = queryString.replace(";", "");
+        Pattern pattern = Pattern.compile("insert into\\s+(.*?)\\s+\\((.*?)\\)\\s+values\\s+\\((.*?)\\)");
+        Matcher matcher = pattern.matcher(queryString);
+
+        matcher.find();
+
+
+        String tableName = matcher.group(1);
+        String[] columnName = matcher.group(2)
+                .replaceAll("\\s+", "")
+                .replaceAll("[\\[\\](){}]","")
+                .split(",");
+
+        String[] insertValues = matcher.group(3)
+                .replaceAll("\\s+", "")
+                .replaceAll("[\\[\\](){}]","")
+                .replace("\"","")
+                .replace("'","")
+                .split(",");
+
+
+
+
+        Map<String, String> valueMap=new HashMap<>();
+
+
+        String[] Parts;
+        for(int i=0;i<insertValues.length;i++){
+
+            System.out.println(insertValues[i].replaceAll("\\'", ""));
+            valueMap.put(columnName[i], insertValues[i].replaceAll("\\'", ""));
+        }
+
+
+        queryObj.setTableName(tableName);
+        queryObj.setOptionMap(valueMap);
+        //queryObj.setColumns(columnName[0]);
+        //queryObj.setColumns(columnName.length,columnName);
+        //queryObj.setValueMap(valueMap);
+
+        return queryObj;
+
 
     }
     public Query updateParser (String queryString) {
