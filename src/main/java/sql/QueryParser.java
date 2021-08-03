@@ -25,19 +25,19 @@ public class QueryParser {
             String workingQuery = queryList[3];
             workingQuery = workingQuery.replaceAll(",", " ");
             workingQuery = workingQuery.replaceAll("[^a-zA-Z ]", "");
-            System.out.println(workingQuery);
+//            System.out.println(workingQuery);
             String aftersplit1[] = workingQuery.split("primary");
             String firstpart1 = aftersplit1[0];
-            System.out.println(firstpart1);
+//            System.out.println(firstpart1);
             firstpart1 = firstpart1.replaceAll("  ", " ");
-            System.out.println(firstpart1);
+//            System.out.println(firstpart1);
             String[] workSql = firstpart1.split(" ");
 //        System.out.println(workSql[1]);
             for (int i = 1; i< workSql.length-1; i=i+2){
                 optionMap.put(workSql[i],workSql[i+1]);
             }
             queryOBJ.setOptionMap(optionMap);
-            System.out.println(optionMap);
+//            System.out.println(optionMap);
             if (query1.contains("primary")) {
                 String aftersplit[] = query1.split("primary");
                 String firstpart = aftersplit[0];
