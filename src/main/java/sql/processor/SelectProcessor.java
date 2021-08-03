@@ -7,7 +7,7 @@ import java.util.*;
 
 public class SelectProcessor {
 
-    public void process (Query queryObj, DatabaseStructures databaseStructures) {
+    public String process (Query queryObj, DatabaseStructures databaseStructures) {
         String tableName = queryObj.getTableName();
         String columns = queryObj.getColumns();
         String[] columnsList = columns.split(",");
@@ -46,23 +46,21 @@ public class SelectProcessor {
             }
             if (!selectedRow.isEmpty()) {
                 selectedData.add(selectedRow);
-//                System.out.println("Selected row added..");
             }
         }
 
         displaySelectedData(selectedData, columnsList);
+        return "Rows returned : "+selectedData.size();
     }
 
     public void displaySelectedData (List<Map<String, String>> selectedData, String[] columnsArray) {
         List<String> columnsList = Arrays.asList(columnsArray);
-//        System.out.println("Keys :"+columnsList.size());
 
         for (String column : columnsList) {
             System.out.print(column + " | ");
         }
         System.out.println();
         for (Map<String, String> row : selectedData) {
-//            System.out.println(row.get("name"));
             for (String column : columnsList) {
                 System.out.print(row.get(column) + " | ");
             }

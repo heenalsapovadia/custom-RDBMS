@@ -1,0 +1,6 @@
+id|name
+1|finance
+2|research
+3|marketing
+4|hr
+5|production

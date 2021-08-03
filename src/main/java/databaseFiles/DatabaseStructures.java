@@ -10,12 +10,14 @@ import java.util.regex.Pattern;
 
 public class DatabaseStructures {
     public String databaseName = "";
-    // table : <colname, value>
+    // table : list of <colname, value>
     public Map<String, List<Map<String, String>>> databaseData = new HashMap<>();
     // table : <col, datatype>
     public Map<String, Map<String, String>> tableStructures = new HashMap<>();
+    // table : column name
     public Map<String, String> primaryKeyMap = new HashMap<>();
-    public Map<String, String> foreignKeyMap = new HashMap<>(); // doubtful
+    // table : list of <column:value, refTable:value, refTableColumn:value>
+    public Map<String, List<Map<String, String>>> foreignKeyMap = new HashMap<>();
 
     String pathToDatabases = "src/main/java/databaseFiles";
 
@@ -121,7 +123,20 @@ public class DatabaseStructures {
         primaryKeyMap.put(tableName, PK.split(":")[1]);
 
         if (keysParts.length>1) {
-            String FK = keysParts[1];
+            String FK = keysParts[1].split(":")[1]
+                    .replaceAll("\\(", "")
+                    .replaceAll("\\)", "");
+            String[] FKPairs = FK.split(",");
+            List<Map<String,String>> foreignKeyList = new ArrayList<>();
+            for (String FKPair : FKPairs) {
+                Map<String,String> FKMap = new HashMap<>();
+                String[] parts = FKPair.split("\\?");
+                FKMap.put("column", parts[0]);
+                FKMap.put("refTable", parts[1]);
+                FKMap.put("refTableColumn", parts[2]);
+                foreignKeyList.add(FKMap);
+            }
+            foreignKeyMap.put(tableName, foreignKeyList);
         }
     }
 
