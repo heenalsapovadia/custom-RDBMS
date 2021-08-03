@@ -152,7 +152,7 @@ public class QueryParser {
         for (String option : optionsList) {
             option = option.replaceAll("\\s+", "");
             String[] optParts = option.split("=");
-            optionsMap.put(optParts[0], optParts[1].replaceAll("\\'", ""));
+            optionsMap.put(optParts[0], optParts[1]);
         }
 
         queryObj.setOptionMap(optionsMap);

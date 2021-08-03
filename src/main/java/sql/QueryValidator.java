@@ -1,6 +1,8 @@
 package sql;
 
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QueryValidator {
 
@@ -15,19 +17,27 @@ public class QueryValidator {
         return "INVALID";
     }
 
-//    public void parseQuery (String queryType, String query) {
-//        QueryParser queryParser = new QueryParser();
-//        Query queryObj = new Query();
-//
-//        switch (queryType) {
-//            case "create" :
-////                queryParser.createParser(query);
-//            case "select" :
-//                queryObj = queryParser.selectParser(query);
-//
-//            case "insert" :
-//            case "update" :
-//            case "delete" :
-//        }
-//    }
+    public boolean isInteger (String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        }
+        catch (NumberFormatException nfe) {
+            return false;
+        }
+    }
+
+    public boolean isVarchar (String value) {
+        try {
+            System.out.println(value);
+            Pattern pattern = Pattern.compile("'(.*)'");
+            Matcher matcher = pattern.matcher(value);
+            matcher.find();
+            System.out.println(matcher.group(1));
+            return true;
+        }
+        catch (Exception e) {
+            return false;
+        }
+    }
 }
