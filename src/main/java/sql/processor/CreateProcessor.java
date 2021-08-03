@@ -44,10 +44,11 @@ public class CreateProcessor {
         //	create directory
         //	create empty metadata.txt in directory
 
-        String dbName = databaseStructures.databaseName;
+        String dbName = queryObj.getDatabaseName();
         String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
         String makedirectory = "src/main/java/databaseFiles/";
         String finaldirectoryName = makedirectory + dbName;
+//        System.out.println(finaldirectoryName);
         String pathtometadata = finaldirectoryName + "/";
         String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
@@ -71,13 +72,13 @@ public class CreateProcessor {
         // Create empty directory
         File directory = new File(finaldirectoryName);
         directory.mkdir();
-        System.out.println("Directory " + dbName + " created");
+//        System.out.println("Directory " + dbName + " created");
 
         // Create empty metadata file
         File file2 = new File(finalmetadataPath);
         try {
             file2.createNewFile();
-            System.out.println("Empty file created named " + "METADATA.txt");
+//            System.out.println("Empty file created named " + "METADATA.txt");
         } catch (IOException e) {
             e.printStackTrace();
         }

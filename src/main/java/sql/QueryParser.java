@@ -14,12 +14,15 @@ public class QueryParser {
         query = query.replaceAll("[^a-zA-Z ]", "");
         String[] sqlWords = query.split(" ");
 
-        String action = sqlWords[0];
+//        String action = sqlWords[0];
         String type = sqlWords[1];
         String name = sqlWords[2];
-        String location = sqlWords[3];
+//        String location = sqlWords[3];
 
         queryObj.setType(type);
+        if (type.equals("database")) {
+            queryObj.setDatabaseName(name);
+        }
         queryObj.setTableName(name);
         return queryObj;
     }
