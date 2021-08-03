@@ -11,6 +11,23 @@ public class QueryParser {
 
     }
 
+    public Query useParser(String queryString)
+    {
+        queryString = queryString.replaceAll(";", "");
+        String[] sql = queryString.split(" ");
+
+        //logger.info("Parsing Query:"+query);
+        //String action = sql[0];
+        String databaseName = sql[1];
+
+        //logger.info("Converting SQL query to internal query form");
+        Query query = new Query();
+        // Query.set("action",action);
+        query.setDatabaseName(databaseName);
+
+        return query;
+    }
+
     public Query selectParser (String queryString) {
         // select * from table_name;
         // select * from table_name where col1 = abc;
@@ -50,7 +67,47 @@ public class QueryParser {
         return queryObj;
     }
 
-    public void insertParser (String query) {
+    public Query insertParser (String queryString) {
+
+        Query queryObj = new Query();
+        queryString = queryString.replace(";", "");
+        Pattern pattern = Pattern.compile("insert into\\s(.*?)\\s(.*?)\\svalues\\s(.*?);", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(queryString);
+
+        matcher.find();
+        //String columns = matcher.group(1).replaceAll("\\s+", "");
+        String tableName = matcher.group(0);
+        String[] columnName = matcher.group(2)
+                .replaceAll("\\s+", "")
+                .replaceAll("[\\[\\](){}]","")
+                .split(",");
+
+        String[] insertValues = matcher.group(3)
+                .replaceAll("\\s+", "")
+                .replaceAll("[\\[\\](){}]","")
+                .replace("\"","")
+                .replace("'","")
+                .split(",");
+
+
+
+        Map<String, String> valueMap=new HashMap<>();
+        // for (String value : insertValues) {
+        for(int i=0;i<insertValues.length;i++){
+            insertValues[i] = insertValues[i].replaceAll("\\s+", "");
+            String[] Parts = insertValues[i].split(",");
+            valueMap.put(columnName[i], Parts[i].replaceAll("\\'", ""));
+        }
+
+
+        queryObj.setTableName(tableName);
+        queryObj.setOptionMap(valueMap);
+        //queryObj.setColumns(columnName[0]);
+        //queryObj.setColumns(columnName.length,columnName);
+        //queryObj.setValueMap(valueMap);
+
+        return queryObj;
+
 
     }
     public Query updateParser (String queryString) {
