@@ -67,10 +67,15 @@ public class QueryEngine {
                 switch (queryType) {
                     case "use" :
                         // load tableData
-                    case "create" :
+                    case "createdb" :
                         queryObj = queryParser.createParser(query);
                         CreateProcessor createProcessor = new CreateProcessor();
-                        createProcessor.create(queryObj, databaseStructures);
+                        createProcessor.createdb(queryObj, databaseStructures);
+                        break;
+                    case "createtable" :
+                        queryObj = queryParser.createParser(query);
+                        CreateProcessor createProcessor1 = new CreateProcessor();
+                        createProcessor1.createtable(queryObj, databaseStructures);
                         break;
 
                     case "select" :

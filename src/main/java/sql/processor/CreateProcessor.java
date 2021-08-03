@@ -1,12 +1,13 @@
 package sql.processor;
 
 import databaseFiles.DatabaseStructures;
+import org.apache.commons.lang3.StringUtils;
 import sql.Query;
 
 import java.io.*;
 
 public class CreateProcessor {
-    public void create(Query queryObj, DatabaseStructures databaseStructures) {
+    public void createtable(Query queryObj, DatabaseStructures databaseStructures) {
         //TODO: CREATE TABLE
         // ADD DATA TO  METADATA FILE
         // ADD NEW FILE WITH TABLENAME.TXT AND CLOUMNNAME
@@ -15,34 +16,42 @@ public class CreateProcessor {
         String columns = queryObj.getColumns();
         String[] columnsList = columns.split(",");
         String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
-        String pathtometaFile = "src/main/java/databaseFiles/";
+        String makedirectory = "src/main/java/databaseFiles/";
+        String finaldirectoryName = makedirectory + tableName;
+        String pathtometadata = finaldirectoryName + "/";
+        String finalmetadataPath = pathtometadata + "METADATA.txt";
         final String newLine = System.getProperty("line.separator");
 
+        // TODO append data into METADATA.txt
+        String appendingTxt = StringUtils.join(columnsList, "|");
+        try {
+            FileWriter fw = new FileWriter(finalmetadataPath,true);
+            fw.write(appendingTxt);
+            fw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-//
-//        File file = new File(pathtodbFiles);
-//        try {
-//            FileWriter fileWriter = new FileWriter(file);
-//            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-//            bufferedWriter.newLine();
-//            bufferedWriter.write(tableName);
-//            bufferedWriter.close();
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        // Add Data to Meta Data
-//        // Make
-//
-//
+        // TODO: create newfile with tablename.txt and add coloumname
 
 
+    }
+
+    public void createdb(Query queryObj, DatabaseStructures databaseStructures) {
         //TODO: CREATE DB
         //  append db name to databases.txt
         //	create directory
         //	create empty metadata.txt in directory
+
+        String tableName = queryObj.getTableName();
+        String columns = queryObj.getColumns();
+        String[] columnsList = columns.split(",");
+        String pathtodbFiles = "src/main/java/databaseFiles/databases.txt";
+        String makedirectory = "src/main/java/databaseFiles/";
+        String finaldirectoryName = makedirectory + tableName;
+        String pathtometadata = finaldirectoryName + "/";
+        String finalmetadataPath = pathtometadata + "METADATA.txt";
+        final String newLine = System.getProperty("line.separator");
 
         // Append db name to database.tx
         PrintWriter printWriter = null;
@@ -61,15 +70,11 @@ public class CreateProcessor {
         }
 
         // Create empty directory
-        String makedirectory = "src/main/java/databaseFiles/";
-        String finaldirectoryName = makedirectory + tableName;
         File directory = new File(finaldirectoryName);
         directory.mkdir();
-        System.out.println("Directory " +tableName+ " created");
-        
+        System.out.println("Directory " + tableName + " created");
+
         // Create empty metadata file
-        String pathtometadata = finaldirectoryName + "/";
-        String finalmetadataPath = pathtometadata + "METADATA.txt";
         File file2 = new File(finalmetadataPath);
         try {
             file2.createNewFile();
