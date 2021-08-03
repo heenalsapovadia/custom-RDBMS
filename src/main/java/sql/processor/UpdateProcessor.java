@@ -58,7 +58,7 @@ public class UpdateProcessor {
         }
         databaseStructures.databaseData.put(tableName, tableData);
         //write the updated value in db
-        databaseStructures.storeDatabase("update", "employee");
+        databaseStructures.storeDatabase("update", tableName);
 
         // release the lock
         lockManager.releaseLock(databaseName, tableName);
