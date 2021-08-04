@@ -11,6 +11,7 @@ public class SelectProcessor {
         String tableName = queryObj.getTableName();
         String columns = queryObj.getColumns();
         String[] columnsList = columns.split(",");
+
         // set the columnsList to all columns if it is *
         if (columnsList.length == 1) {
             Set<String> columnsSet = databaseStructures.tableStructures.get(tableName).keySet();
@@ -28,8 +29,11 @@ public class SelectProcessor {
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
         List<Map<String, String>> selectedData = new ArrayList<>();
 
+        // looping over main data
         for (Map<String, String> row : tableData) {
             Map<String, String> selectedRow = new HashMap<>();
+
+            // WHERE CLAUSE CONDITION CHECK
             if (conditionMap!=null) {
                 boolean conditionPass = true;
                 for (Map.Entry<String, String> map : conditionMap.entrySet()) {

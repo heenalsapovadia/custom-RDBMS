@@ -28,6 +28,7 @@ public class QueryEngine {
         String queryType;
 
         while (true) {
+            // take user input for query
             String query = inputQuery();
             start = Instant.now();
             logGenerator.log("Query Submission TimeStamp : "+start);

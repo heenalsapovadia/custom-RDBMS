@@ -6,11 +6,15 @@ import java.io.*;
 import java.util.*;
 
 public class ERDGenerator {
+    // list of db table pairs with cardinality
     public List<Map<String, String>> cardinalityList = new ArrayList<>();
+
     public String pathToERD = "src/main/java/erdGenerator";
     String pathToDatabases = "src/main/java/databaseFiles";
 
     public void generateERD (String database, DatabaseStructures databaseStructures) {
+
+        // generate cardinality list
         generateCardinality(database, databaseStructures);
 
         String pathToErdOfDatabase = pathToERD+"/"+database+".txt";
@@ -20,14 +24,17 @@ public class ERDGenerator {
                 Set<String> tableSet = cardinalityMap.keySet();
                 List<String> tableList = new ArrayList<>();
                 tableList.addAll(tableSet);
+
                 String table1 = printTable(tableList.get(0), databaseStructures);
                 bufferedWriter.write(table1);
                 System.out.println(table1);
+
                 String str = "Cardinality between "+tableList.get(0)+" and "+tableList.get(1)+" - ";
                 String cardinality = cardinalityMap.get(tableList.get(0))+" : "+cardinalityMap.get(tableList.get(1));
                 bufferedWriter.write(str+cardinality);
                 bufferedWriter.newLine();
                 System.out.println(str+cardinality);
+
                 String table2 = printTable(tableList.get(1), databaseStructures);
                 bufferedWriter.write(table2);
                 System.out.println(table2);
@@ -40,6 +47,10 @@ public class ERDGenerator {
         }
     }
 
+    /*
+    Generate the list of cardinalities between tables containing data
+
+     */
     public void generateCardinality (String database, DatabaseStructures databaseStructures) {
         cardinalityList = new ArrayList<>();
         for (Map.Entry<String, List<Map<String, String>>> map : databaseStructures.foreignKeyMap.entrySet()) {
@@ -78,6 +89,9 @@ public class ERDGenerator {
         return true;
     }
 
+    /*
+    Print the table structure and KEYS
+     */
     private String printTable (String table, DatabaseStructures databaseStructures) {
         Map<String, Map<String, String>> tableStructures = databaseStructures.tableStructures;
         Map<String, String> primaryKeyMap = databaseStructures.primaryKeyMap;

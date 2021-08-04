@@ -22,6 +22,8 @@ public class TransactionProcessor {
     public void process (List<String> queries, DatabaseStructures databaseStructures) {
         String queryType = "";
         DatabaseStructures transactionStructures = new DatabaseStructures();
+
+        // make a copy of databaseStructures for transaction
         transactionStructures.databaseName = databaseStructures.databaseName;
         transactionStructures.tableStructures.putAll(databaseStructures.tableStructures);
         transactionStructures.primaryKeyMap.putAll(databaseStructures.primaryKeyMap);
@@ -38,8 +40,6 @@ public class TransactionProcessor {
             Query queryObj = new Query();
             queryType = queryValidator.getQueryType(query);
             switch (queryType) {
-                case "INVALID":
-                    break;
                 case "insert":
                     queryObj = queryParser.insertParser(query);
                     InsertProcessor insertProcessor = new InsertProcessor();
@@ -76,7 +76,6 @@ public class TransactionProcessor {
                     break;
 
                 case "rollback":
-                    transactionStructures = new DatabaseStructures();
                     logGenerator.log("** TRANSACTION ROLLBACK **");
                     return;
                 case "commit":

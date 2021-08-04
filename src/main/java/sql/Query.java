@@ -16,9 +16,6 @@ public class Query {
     private Map<String,String> FKMap = new HashMap<>();
     private Map<String, String> columnNameType;
 
-    //TODO: MAKE SETERS
-
-
     public Map<String, String> getFKMap() {
         return FKMap;
     }

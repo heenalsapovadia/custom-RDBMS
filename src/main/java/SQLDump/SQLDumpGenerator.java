@@ -3,6 +3,7 @@ package SQLDump;
 import java.io.*;
 
 public class SQLDumpGenerator {
+
     public String pathToSQLDumps = "src/main/java/SQLDump";
     String pathToDatabases = "src/main/java/databaseFiles";
 
@@ -23,6 +24,7 @@ public class SQLDumpGenerator {
                 bufferedWriter.newLine();
                 line = bufferedReader.readLine();
             }
+            // Calling insert queries generator
             bufferedWriter.write(insertQuery(database));
             bufferedWriter.close();
             System.out.println("SQL DUMP has been generated - You can access it at 'src/main/java/SQLDump'");
@@ -32,6 +34,9 @@ public class SQLDumpGenerator {
         }
     }
 
+    /*
+    Generate Create table query
+     */
     public String createTableQuery (String metadata) {
         StringBuilder queryBuilder = new StringBuilder("create table ");
         String[] parts = metadata.replaceAll("\\s+", "").split("=");
@@ -78,6 +83,9 @@ public class SQLDumpGenerator {
         return queryBuilder.toString();
     }
 
+    /*
+    Generate Insert query
+     */
     public String insertQuery (String database) {
         StringBuilder queryBuilder = new StringBuilder();
         File dir = new File(pathToDatabases+"/"+database);

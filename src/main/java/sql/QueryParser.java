@@ -84,9 +84,6 @@ public class QueryParser {
     }
 
     public Query selectParser (String queryString) {
-        // select * from table_name;
-        // select * from table_name where col1 = abc;
-        // select col1, col2 from table_name where col1 = abc;
         Query queryObj = new Query();
         queryString = queryString.replace(";", "");
         Pattern pattern = Pattern.compile("select\\s+(.*)\\s+from\\s+(.*)");
@@ -171,9 +168,6 @@ public class QueryParser {
     }
 
     public Query updateParser (String queryString) {
-        // update table_name set col1=abc, col2=12;
-        // update table_name set col1=abc where col2 = c;
-
         Query queryObj = new Query();
         queryString = queryString.replace(";", "");
         Pattern pattern = Pattern.compile("update\\s+(.*)\\s+set\\s+(.*)");
@@ -186,6 +180,8 @@ public class QueryParser {
 
         String conditions = "";
         Matcher whereMatcher = wherePart.matcher(optionsPart);
+
+        // if WHERE clause exists
         if (whereMatcher.find()) {
             conditions = whereMatcher.group(1);
             String[] group2 = optionsPart.split("where");

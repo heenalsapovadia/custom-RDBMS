@@ -44,8 +44,6 @@ public class DatabaseStructures {
                 while (line!=null) {
                     if (firstLine) {
                         columns = line.split("\\|");
-//                        System.out.println(line);
-//                        System.out.println(columns.length);
                         firstLine = false;
                     }
                     else {
@@ -64,7 +62,6 @@ public class DatabaseStructures {
             }
             if (!tableData.isEmpty()) {
                 databaseData.put(tableName, tableData);
-//                System.out.println("Table entered to dbData...");
             }
         }
 
@@ -75,6 +72,9 @@ public class DatabaseStructures {
 
     }
 
+    /*
+    Fetch the database STRUCTURE from METADATA
+     */
     private void loadTableStructure (File directory) {
         String fileName = "";
         for (File file : directory.listFiles()) {
@@ -85,7 +85,6 @@ public class DatabaseStructures {
                     String line = bufferedReader.readLine();
                     while (line!=null) {
                         Map<String, String> table = new HashMap<>();
-//                        Pattern pattern = Pattern.compile("(.*)\\s*\\=\\s*\\{(.*)\\s*\\}");
                         Pattern pattern = Pattern.compile("(.*)\\s+\\=\\s+\\{(.*)\\s+}\\s+\\|\\s+\\{\\s+(.*)\\s+}");
                         Matcher matcher = pattern.matcher(line);
                         matcher.find();
@@ -101,8 +100,8 @@ public class DatabaseStructures {
                         }
                         tableStructures.put(tableName, table);
 
+                        // LOAD KEYS IF EXIST
                         if (keys.length()!=0) {
-                            // call set PK and FK
                             loadKeys(keys, tableName);
                         }
 
@@ -117,6 +116,9 @@ public class DatabaseStructures {
         }
     }
 
+    /*
+    Fetch the database KEYS from METADATA
+     */
     private void loadKeys (String keys, String tableName) {
         keys = keys.replaceAll("\\s+", "");
         String[] keysParts = keys.split("-");
@@ -142,20 +144,8 @@ public class DatabaseStructures {
     }
 
     /*
-    Write the database structures back to files
+    Write the database data back to files
      */
-    public void storeDatabase (String queryType, String tableName) {
-        switch (queryType) {
-            case "update":
-                pushDatabaseData(tableName);
-            case "insert":
-                pushDatabaseData(tableName);
-            case "create":
-                // pushDatabaseData(tableName);
-                // pushKeys(tableName);
-
-        }
-    }
     public void pushDatabaseData (String tableName) {
         File file = new File(pathToDatabases+"/"+databaseName+"/"+tableName+".txt");
         List<Map<String, String>> tableData = databaseData.get(tableName);
@@ -189,6 +179,9 @@ public class DatabaseStructures {
         }
     }
 
+    /*
+    Write the database STRUCTURE AND KEYS to METADATA
+     */
     public void pushKeys (String tableName) {
         StringBuilder metadata = new StringBuilder();
         metadata.append(tableName+" = { ");

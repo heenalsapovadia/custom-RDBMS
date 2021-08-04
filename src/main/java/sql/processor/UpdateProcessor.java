@@ -6,8 +6,6 @@ import sql.Query;
 import sql.QueryValidator;
 
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class UpdateProcessor {
 
@@ -21,7 +19,6 @@ public class UpdateProcessor {
 
         // check for locks and apply lock
         if (!lockManager.checkAndApplyLock(databaseName, tableName)) {
-            // return appropriate message for log
             logMessage = "** LOCK CONSTRAINT : "+tableName;
             return null;
         }
@@ -32,14 +29,19 @@ public class UpdateProcessor {
         List<Map<String, String>> tableData = databaseStructures.databaseData.get(tableName);
         String primaryKeyColumn = databaseStructures.primaryKeyMap.get(tableName);
         Map<String, String> tbStructure = databaseStructures.tableStructures.get(tableName);
+
+        // Create list of UNIQUE PK values in data
         Set<String> uniqueKeyValues = new HashSet<>();
         for (Map<String, String> record : tableData) {
             uniqueKeyValues.add(record.get(primaryKeyColumn));
         }
         int rowsModified = 0;
+
         // for loop over tableData - update the ds
         for (int i=0; i<tableData.size(); i++) {
             Map<String, String> row = tableData.get(i);
+
+            // WHERE CLAUSE CONDITION CHECK
             if (conditionMap!=null) {
                 boolean conditionPass = true;
                 for (Map.Entry<String, String> map : conditionMap.entrySet()) {
@@ -51,6 +53,7 @@ public class UpdateProcessor {
                 if (!conditionPass)
                     continue;
             }
+
             for (Map.Entry<String, String> entry : optionsMap.entrySet()) {
                 if (entry.getKey().equals(primaryKeyColumn)) {
                     if (uniqueKeyValues.contains(entry.getValue())) {
@@ -65,6 +68,7 @@ public class UpdateProcessor {
                         row.put(entry.getKey(), entry.getValue());
                     }
                     else {
+                        // release locks
                         lockManager.releaseLock(databaseName,tableName);
                         logMessage = "** DATATYPE CONSTRAINT VIOLATED - Expected INT **";
                         return null;
@@ -81,7 +85,6 @@ public class UpdateProcessor {
                         return null;
                     }
                 }
-
             }
             tableData.set(i, row);
             rowsModified++;

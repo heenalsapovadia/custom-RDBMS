@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public class LockManager {
+    // Locks Map -> <DatabaseName, List<Tables>>
     public Map<String, List<String>> locks = new HashMap<>();
     String pathToLocks = "src/main/java/databaseFiles/locks.txt";
 
@@ -42,7 +43,6 @@ public class LockManager {
     }
 
     public void getLocksFromFile () {
-
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(pathToLocks));
             String line = bufferedReader.readLine();
